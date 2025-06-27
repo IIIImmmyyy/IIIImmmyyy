@@ -1,14 +1,13 @@
-# 👋 你好，我是 IIIImmmyyy
+# 👋 你好，我是 Imy
 
 <div align="center">
   <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=30&pause=1000&color=00D4FF&center=true&vCenter=true&width=600&lines=游戏安全研究员;Unity逆向工程师;Frida工具开发者;移动安全" alt="Typing SVG" />
 </div>
 
 <div align="center">
-
+  
 [![个人技术博客](https://img.shields.io/badge/🌟_个人技术博客-FF6B35?style=for-the-badge&logo=hexo&logoColor=white)](https://iiiimmmyyy.github.io/IIIImmmyyy/)
 [![GitHub关注者](https://img.shields.io/badge/GitHub_关注者-133_followers-00D4FF?style=for-the-badge&logo=github)](https://github.com/IIIImmmyyy)
-[![总Stars](https://img.shields.io/badge/总Stars-600+-00D4FF?style=for-the-badge&logo=github)](https://github.com/IIIImmmyyy)
 
 </div>
 
@@ -17,7 +16,7 @@
 > 专注于Unity游戏安全研究与逆向工程，致力于移动游戏安全防护技术的探索与实践
 
 - 🎮 **游戏安全** - 专注Unity手游安全研究
-- 🔍 **逆向工程师** - APK/IPA逆向分析
+- 🔍 **逆向工程师** - APK/IPA逆向分析 
 - 🛠️ **工具开发者** - Frida插件与安全工具开发
 - 📍 **所在地** - 厦门，中国
 - 🌱 **持续学习** - Il2cpp技术栈、OLLVM反混淆
@@ -62,10 +61,10 @@
 
 <div align="center">
   <a href="https://github.com/IIIImmmyyy/frida-il2cppDumper">
-    <img align="center" src="https://github-readme-stats.vercel.app/api/pin/?username=IIIImmmyyy&repo=frida-il2cppDumper&theme=tokyonight" />
+    <img align="center" src="https://github-readme-stats.vercel.app/api/pin/?username=IIIImmmyyy&repo=frida-il2cppDumper&theme=vue&hide_border=true" />
   </a>
   <a href="https://github.com/IIIImmmyyy/AntiOllvm">
-    <img align="center" src="https://github-readme-stats.vercel.app/api/pin/?username=IIIImmmyyy&repo=AntiOllvm&theme=tokyonight" />
+    <img align="center" src="https://github-readme-stats.vercel.app/api/pin/?username=IIIImmmyyy&repo=AntiOllvm&theme=vue&hide_border=true" />
   </a>
 </div>
 
@@ -82,7 +81,7 @@
 - 🛠️ [**UnityReverseEngine技术详解**](https://iiiimmmyyy.github.io/IIIImmmyyy/) - 突破性Unity反编译引擎
 - 🎯 [**IL2CPP逆向工程实战**](https://iiiimmmyyy.github.io/IIIImmmyyy/) - ARM64架构下的反编译技术
 
-### 📚 开源教程
+### 📚 教程
 - 🎓 [Unity手游安全中级教程](https://github.com/IIIImmmyyy/U3DGameCourse) - 系统性游戏安全学习资料
 - 🔧 [Frida实战系列](https://github.com/IIIImmmyyy/frida-trace) - 动态分析工具使用指南
 - 🛡️ [Il2cpp逆向实践](https://github.com/IIIImmmyyy/frida-il2cppDumper) - 内存Dump技术详解
@@ -101,8 +100,8 @@
 
 <div align="center">
   <img src="https://komarev.com/ghpvc/?username=IIIImmmyyy&color=00D4FF&style=flat-square&label=访问量" alt="Profile Views" />
-
-**🚀 "代码改变世界，安全守护未来" 🚀**
-
-*感谢访问我的GitHub主页！如果我的项目对你有帮助，请不要忘记给个⭐️*
+  
+  **🚀 "代码改变世界，安全守护未来" 🚀**
+  
+  *感谢访问我的GitHub主页！如果我的项目对你有帮助，请不要忘记给个⭐️*
 </div> 

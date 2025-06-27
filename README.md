@@ -1,8 +1,6 @@
 # 👋 你好，我是 IIIImmmyyy
 
-<div align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=30&pause=1000&color=00D4FF&center=true&vCenter=true&width=600&lines=游戏安全研究员;Unity逆向工程师;Frida工具开发者;移动安全" alt="Typing SVG" />
-</div>
+
 
 <div align="center">
   

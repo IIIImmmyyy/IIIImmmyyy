@@ -1,6 +1,8 @@
-# 👋 你好，我是 IIIImmmyyy
+# 👋 你好，我是 Imy
 
-
+<div align="center">
+  <a href="README-EN.md">🇺🇸 English</a> | 🇨🇳 中文
+</div>
 
 <div align="center">
   

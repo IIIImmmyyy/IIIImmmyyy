@@ -1,0 +1,126 @@
+# 👋 Hello, I'm IIIImmmyyy
+
+
+<div align="center">
+  
+[![Personal Tech Blog](https://img.shields.io/badge/🌟_Personal_Tech_Blog-FF6B35?style=for-the-badge&logo=hexo&logoColor=white)](https://iiiimmmyyy.github.io/IIIImmmyyy/)
+[![GitHub Followers](https://img.shields.io/badge/GitHub_Followers-133_followers-00D4FF?style=for-the-badge&logo=github)](https://github.com/IIIImmmyyy)
+
+</div>
+
+## 🚀 About Me
+
+> Focused on Unity game security research and reverse engineering, dedicated to exploring and practicing mobile game security protection technologies
+
+- 🎮 **Game Security Expert** - Specializing in Unity mobile game security research
+- 🔍 **Reverse Engineer** - APK/IPA reverse analysis specialist  
+- 🛠️ **Tool Developer** - Frida plugin and security tool development
+- 📍 **Location** - Xiamen, China
+- 🌱 **Continuous Learning** - Il2cpp tech stack, OLLVM deobfuscation, HybridCLR
+
+## 🛠️ Tech Stack
+
+### Programming Languages
+![C#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=c-sharp&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![C++](https://img.shields.io/badge/C++-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+
+### Main Technologies
+![Unity](https://img.shields.io/badge/Unity-000000?style=for-the-badge&logo=unity&logoColor=white)
+![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
+![Frida](https://img.shields.io/badge/Frida-FF6B35?style=for-the-badge&logo=frida&logoColor=white)
+
+### Professional Areas
+- 🎯 **Il2cpp Reverse** - Memory dump, source code recovery
+- 🔐 **Game Protection** - Anti-debugging, anti-hook techniques
+- ⚡ **Dynamic Analysis** - Frida hooking, runtime analysis
+- 🛡️ **Code Obfuscation** - OLLVM deobfuscation techniques
+- 📱 **Mobile Security** - Android/iOS application security
+
+## 🌟 Featured Projects
+
+<div align="center">
+
+| Project | Description | Stars | Tech Stack |
+|---------|-------------|-------|------------|
+| [**frida-il2cppDumper**](https://github.com/IIIImmmyyy/frida-il2cppDumper) | Enhanced Il2cpp memory dump tool with YiDun protection support | ![Stars](https://img.shields.io/github/stars/IIIImmmyyy/frida-il2cppDumper?style=flat&color=yellow) | JavaScript, Frida |
+| [**AntiOllvm**](https://github.com/IIIImmmyyy/AntiOllvm) | OLLVM deobfuscation tool based on fake runtime | ![Stars](https://img.shields.io/github/stars/IIIImmmyyy/AntiOllvm?style=flat&color=yellow) | C#, LLVM |
+| [**frida-trace**](https://github.com/IIIImmmyyy/frida-trace) | Frida assembly tracing and register change monitoring tool | ![Stars](https://img.shields.io/github/stars/IIIImmmyyy/frida-trace?style=flat&color=yellow) | JavaScript, Frida |
+| [**U3DGameCourse**](https://github.com/IIIImmmyyy/U3DGameCourse) | Unity mobile game security intermediate tutorial | ![Stars](https://img.shields.io/github/stars/IIIImmmyyy/U3DGameCourse?style=flat&color=yellow) | Unity, Android |
+| [**UnityReverseEngine**](https://github.com/IIIImmmyyy/UnityReverseEngine) | APK/IPA to Unity project reverse tool | ![Stars](https://img.shields.io/github/stars/IIIImmmyyy/UnityReverseEngine?style=flat&color=yellow) | Unity, Reverse |
+
+</div>
+
+## 📊 GitHub Statistics
+
+<div align="center">
+  <img height="180em" src="https://github-readme-stats.vercel.app/api?username=IIIImmmyyy&show_icons=true&theme=tokyonight&include_all_commits=true&count_private=true"/>
+  <img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=IIIImmmyyy&layout=compact&langs_count=8&theme=tokyonight"/>
+</div>
+
+<div align="center">
+  <img src="https://github-readme-streak-stats.herokuapp.com/?user=IIIImmmyyy&theme=tokyonight" alt="GitHub Streak" />
+</div>
+
+## 🏆 Achievements
+
+<div align="center">
+  <img src="https://github-profile-trophy.vercel.app/?username=IIIImmmyyy&theme=tokyonight&no-frame=true&row=1&column=7" alt="GitHub Trophies" />
+</div>
+
+## 📈 Contribution Graph
+
+<div align="center">
+  <img src="https://github-readme-activity-graph.vercel.app/graph?username=IIIImmmyyy&theme=tokyo-night&hide_border=true" alt="Contribution Graph" />
+</div>
+
+## 🔥 Popular Repositories
+
+<div align="center">
+  <a href="https://github.com/IIIImmmyyy/frida-il2cppDumper">
+    <img align="center" src="https://github-readme-stats.vercel.app/api/pin/?username=IIIImmmyyy&repo=frida-il2cppDumper&theme=vue&hide_border=true" />
+  </a>
+  <a href="https://github.com/IIIImmmyyy/AntiOllvm">
+    <img align="center" src="https://github-readme-stats.vercel.app/api/pin/?username=IIIImmmyyy&repo=AntiOllvm&theme=vue&hide_border=true" />
+  </a>
+</div>
+
+## 📝 Tech Blog & Personal Website
+
+<div align="center">
+  <a href="https://iiiimmmyyy.github.io/IIIImmmyyy/">
+    <img src="https://img.shields.io/badge/🌟_Visit_My_Tech_Blog-FF6B35?style=for-the-badge&logo=hexo&logoColor=white" alt="Personal Blog" />
+  </a>
+</div>
+
+### 🔥 Latest Blog Articles
+- 🚀 [**UREngine Development Introduction**](https://iiiimmmyyy.github.io/IIIImmmyyy/) - Personal notes and development insights
+- 🛠️ [**UnityReverseEngine Technical Deep Dive**](https://iiiimmmyyy.github.io/IIIImmmyyy/) - Breakthrough Unity decompilation engine
+- 🎯 [**IL2CPP Reverse Engineering Practice**](https://iiiimmmyyy.github.io/IIIImmmyyy/) - Decompilation techniques under ARM64 architecture
+
+### 📚 Open Source Tutorials
+- 🎓 [Unity Mobile Game Security Intermediate Tutorial](https://github.com/IIIImmmyyy/U3DGameCourse) - Systematic game security learning materials
+- 🔧 [Frida Practical Series](https://github.com/IIIImmmyyy/frida-trace) - Dynamic analysis tool usage guide
+- 🛡️ [Il2cpp Reverse Practice](https://github.com/IIIImmmyyy/frida-il2cppDumper) - Memory dump technical explanation
+
+## 🤝 Contact Me
+
+<div align="center">
+
+[![Personal Website](https://img.shields.io/badge/🌐_Personal_Website-4285f4?style=for-the-badge)](https://iiiimmmyyy.github.io/IIIImmmyyy/)
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github)](https://github.com/IIIImmmyyy)
+[![QQ Email](https://img.shields.io/badge/📧_QQ_Email-D14836?style=for-the-badge&logo=gmail)](mailto:295238641@qq.com)
+[![QQ](https://img.shields.io/badge/QQ-295238641-00D4FF?style=for-the-badge&logo=tencentqq)](tencent://message/?uin=295238641)
+
+</div>
+
+---
+
+<div align="center">
+  <img src="https://komarev.com/ghpvc/?username=IIIImmmyyy&color=00D4FF&style=flat-square&label=Profile+Views" alt="Profile Views" />
+  
+  **🚀 "Code Changes the World, Security Guards the Future" 🚀**
+  
+  *Thanks for visiting my GitHub profile! If my projects help you, please don't forget to give a ⭐️*
+</div> 

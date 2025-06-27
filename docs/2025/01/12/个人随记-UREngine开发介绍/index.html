@@ -1,0 +1,787 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/IIIImmmyyy/img/fluid.png">
+  <link rel="icon" href="/IIIImmmyyy/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Imy">
+  <meta name="keywords" content="逆向工程,Unity,Android,Frida,IL2CPP,反混淆,移动安全,游戏安全">
+  
+    <meta name="description" content="🎭 开篇：自我介绍时间大家好，我是Imy，目前在厦门某大型互联网公司搬砖，正经工作是游戏加固保护（听起来就很高大上是不是？其实就是和各路”黑客”斗智斗勇的活儿）。 我的技术之路有点曲折：最开始是Android开发，大概3年前误入逆向的”深坑”。现在想想，这个转向真是太明智了！为什么？因为AI现在太恐怖了！ 正向开发现在基本上就是：  问AI：”帮我写个XXX功能” AI：”好的，代码如下…” 我">
+<meta property="og:type" content="article">
+<meta property="og:title" content="个人随记：UREngine开发介绍">
+<meta property="og:url" content="https://iiiimmmyyy.github.io/IIIImmmyyy/2025/01/12/%E4%B8%AA%E4%BA%BA%E9%9A%8F%E8%AE%B0-UREngine%E5%BC%80%E5%8F%91%E4%BB%8B%E7%BB%8D/index.html">
+<meta property="og:site_name" content="Imy">
+<meta property="og:description" content="🎭 开篇：自我介绍时间大家好，我是Imy，目前在厦门某大型互联网公司搬砖，正经工作是游戏加固保护（听起来就很高大上是不是？其实就是和各路”黑客”斗智斗勇的活儿）。 我的技术之路有点曲折：最开始是Android开发，大概3年前误入逆向的”深坑”。现在想想，这个转向真是太明智了！为什么？因为AI现在太恐怖了！ 正向开发现在基本上就是：  问AI：”帮我写个XXX功能” AI：”好的，代码如下…” 我">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-01-12T07:30:00.000Z">
+<meta property="article:modified_time" content="2025-06-27T08:06:21.500Z">
+<meta property="article:author" content="Imy">
+<meta property="article:tag" content="Unity">
+<meta property="article:tag" content="逆向工程">
+<meta property="article:tag" content="UREngine">
+<meta property="article:tag" content="个人开发">
+<meta property="article:tag" content="随记">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>个人随记：UREngine开发介绍 - Imy</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/IIIImmmyyy/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/IIIImmmyyy/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/IIIImmmyyy/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"iiiimmmyyy.github.io","root":"/IIIImmmyyy/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/IIIImmmyyy/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/IIIImmmyyy/js/utils.js" ></script>
+  <script  src="/IIIImmmyyy/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/IIIImmmyyy/">
+      <strong>Imy</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/IIIImmmyyy/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/IIIImmmyyy/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/IIIImmmyyy/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/IIIImmmyyy/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/IIIImmmyyy/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/IIIImmmyyy/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="个人随记：UREngine开发介绍"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-01-12 15:30" pubdate>
+          2025年1月12日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          15 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">个人随记：UREngine开发介绍</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="🎭-开篇：自我介绍时间"><a href="#🎭-开篇：自我介绍时间" class="headerlink" title="🎭 开篇：自我介绍时间"></a>🎭 开篇：自我介绍时间</h2><p>大家好，我是Imy，目前在厦门某大型互联网公司搬砖，正经工作是游戏加固保护（听起来就很高大上是不是？其实就是和各路”黑客”斗智斗勇的活儿）。</p>
+<p>我的技术之路有点曲折：最开始是Android开发，大概3年前误入逆向的”深坑”。现在想想，这个转向真是太明智了！为什么？因为AI现在太恐怖了！</p>
+<p>正向开发现在基本上就是：</p>
+<ol>
+<li>问AI：”帮我写个XXX功能”</li>
+<li>AI：”好的，代码如下…”</li>
+<li>我：”嗯，看起来不错，合并！”</li>
+</ol>
+<p>感觉我们正向开发的作用就是review AI代码，这让我感到了深深的危机感！😂</p>
+<p>还好，逆向领域AI现在还是个”半吊子”，比较碎片化。简单的单一知识点AI能搞定，但复杂的交叉学科？抱歉，AI小朋友还得再练练。</p>
+<hr>
+<h2 id="🌟-UREngine诞生记：从异想天开到现实"><a href="#🌟-UREngine诞生记：从异想天开到现实" class="headerlink" title="🌟 UREngine诞生记：从异想天开到现实"></a>🌟 UREngine诞生记：从异想天开到现实</h2><h3 id="💡-灵感乍现"><a href="#💡-灵感乍现" class="headerlink" title="💡 灵感乍现"></a>💡 灵感乍现</h3><p>得益于多年的正向开发经验，我在逆向路上也算是”开了挂”，水平突飞猛进。到了2024年，我脑子里突然冒出一个大胆的想法：<strong>为什么不做一个游戏反编译器？</strong></p>
+<p>听起来很疯狂对不对？但理论验证通过后，我就开始了这个”不自量力”的项目——UREngine。</p>
+<blockquote>
+<p>为什么叫UREngine？因为Unity UE 引擎都是U开头！ </p>
+</blockquote>
+<h3 id="🔄-三次大重构：痛并快乐着"><a href="#🔄-三次大重构：痛并快乐着" class="headerlink" title="🔄 三次大重构：痛并快乐着"></a>🔄 三次大重构：痛并快乐着</h3><p>UREngine经历了大概3次大型重构（听起来就很惨对不对？）。每次重构都是血泪史，但也是技术突破的见证。</p>
+<h4 id="第一次尝试：IL指令转换路线"><a href="#第一次尝试：IL指令转换路线" class="headerlink" title="第一次尝试：IL指令转换路线"></a>第一次尝试：IL指令转换路线</h4><p>最开始我走的是IL指令转换路线，原因很简单：</p>
+<ul>
+<li>C++的模板也是基于IL的</li>
+<li>两者互相转换理论上更简单</li>
+</ul>
+<p>Demo做出来后，我发现了一个致命问题：<strong>调试太难了！</strong></p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs clean">ARM64 -&gt; IL -&gt; ???<br></code></pre></td></tr></table></figure>
+
+<p>这个过程就像是把一幅画先转换成文字描述，再转换成抽象符号，最后你想从这些符号还原出原本的画面内容。每一层转换都会丢失信息，到最后你根本不知道原画长什么样。</p>
+<p>结果可想而知：</p>
+<ul>
+<li>单步调试结果不透明，很难知道发生了什么</li>
+<li>语义优化异常困难</li>
+</ul>
+<p>权衡了很久，我果断放弃了这条路。</p>
+<h4 id="第二次重构：直接转换C"><a href="#第二次重构：直接转换C" class="headerlink" title="第二次重构：直接转换C#"></a>第二次重构：直接转换C#</h4><p>既然IL路线行不通，那就直接上C#！</p>
+<p>这个决定带来的后果是：</p>
+<ul>
+<li>✅ 语义透明，接近人类理解范围</li>
+<li>✅ 好调试，终于能看懂在干什么了</li>
+<li>❌ 闭包类、匿名类需要手动完全链接解析</li>
+<li>❌ 第三方工具无法使用</li>
+<li>❌ 工作量翻倍，甚至更多</li>
+</ul>
+<p>但是！这条路虽然难走，却是正确的方向。</p>
+<hr>
+<h2 id="🛠️-技术难点：多学科交叉的地狱模式"><a href="#🛠️-技术难点：多学科交叉的地狱模式" class="headerlink" title="🛠️ 技术难点：多学科交叉的地狱模式"></a>🛠️ 技术难点：多学科交叉的地狱模式</h2><h3 id="向大佬致敬"><a href="#向大佬致敬" class="headerlink" title="向大佬致敬"></a>向大佬致敬</h3><p>在这里必须要感慨一下：<strong>IDA牛逼！Binary Ninja牛逼！</strong></p>
+<p>只有真正写过F5反汇编为伪C代码的人才知道有多难。IDA的伪C其实是非常强悍的，语义上没有任何问题，只是因为指令的区别导致语义混淆，阅读性困难。</p>
+<h3 id="UREngine的秘密武器：微型Runtime"><a href="#UREngine的秘密武器：微型Runtime" class="headerlink" title="UREngine的秘密武器：微型Runtime"></a>UREngine的秘密武器：微型Runtime</h3><p>针对IDA的不足，UREngine有个杀手锏——<strong>一个非常完整且强悍的微型Runtime</strong>。</p>
+<p>这个Runtime简直就是个全能选手：</p>
+<ul>
+<li>🎭 模拟class、struct的真实内存布局</li>
+<li>🎯 支持语义表达类型的变量</li>
+<li>📸 不同指令地址的快照切换</li>
+<li>🔄 模拟真实的栈帧数据还原</li>
+<li>…等等等等</li>
+</ul>
+<p>有了这个Runtime系统，指令解析就变得异常精确，因为它能理解每一个指令的真实意图：</p>
+<ul>
+<li>这是数学表达式？</li>
+<li>还是赋值操作？</li>
+<li>是向量读取？</li>
+<li>还是函数调用？</li>
+</ul>
+<h3 id="函数级分析：小而精的哲学"><a href="#函数级分析：小而精的哲学" class="headerlink" title="函数级分析：小而精的哲学"></a>函数级分析：小而精的哲学</h3><p>UREngine的分析粒度是函数级别的，这意味着：</p>
+<ul>
+<li>依靠函数建立runtime系统</li>
+<li>不需要全量分析（省时省力）</li>
+<li>分析效率大幅度提升</li>
+</ul>
+<p>就像吃火锅一样，不用一口气涮完所有菜，想吃哪个涮哪个！🍲</p>
+<hr>
+<h2 id="🤝-寻找志同道合的伙伴"><a href="#🤝-寻找志同道合的伙伴" class="headerlink" title="🤝 寻找志同道合的伙伴"></a>🤝 寻找志同道合的伙伴</h2><h3 id="一个人的孤独征途"><a href="#一个人的孤独征途" class="headerlink" title="一个人的孤独征途"></a>一个人的孤独征途</h3><p>UREngine一直是我一个人在开发，说不孤独是假的。很想找一些志同道合的同学一起完善它，但是…</p>
+<p>UREngine涉及到的技术链实在太复杂了：</p>
+<ul>
+<li>汇编指令解析</li>
+<li>控制流图构建</li>
+<li>语义分析</li>
+<li>代码生成</li>
+<li>Runtime模拟</li>
+<li>…</li>
+</ul>
+<p><strong>有能力开发的人全球范围内都屈指可数</strong>。😢</p>
+<p>所以这个项目的进度一直很缓慢，虽然近期已经实现了技术突破，但还远远没有达到我的预期。</p>
+<hr>
+<h2 id="📖-开源计划："><a href="#📖-开源计划：" class="headerlink" title="📖 开源计划："></a>📖 开源计划：</h2><h3 id="第三方依赖"><a href="#第三方依赖" class="headerlink" title="第三方依赖"></a>第三方依赖</h3><p>UREngine使用了两个第三方开源库：</p>
+<ul>
+<li><strong>Cpp2IL</strong>：我也是开发者之一</li>
+<li><strong>Diarm</strong>：ARM指令解析库</li>
+</ul>
+<h4 id="Cpp2IL"><a href="#Cpp2IL" class="headerlink" title="Cpp2IL"></a>Cpp2IL</h4><p>Cpp2IL这部分改动需要和原作者协商才能合并，因为我改了非常多的扩展。我的技术路线和原作者完全不一样：</p>
+<ul>
+<li>原版：更适合IL转换</li>
+<li>我的版本：专为C#直接转换优化</li>
+</ul>
+<h4 id="Diarm"><a href="#Diarm" class="headerlink" title="Diarm"></a>Diarm</h4><p>Diarm基本上把缺少的指令解析全部补全。但原作者貌似放弃这个项目了，我Push的改动也没有合并。</p>
+<p>不过没关系，感兴趣的小伙伴可以直接fork我的分支，这些改动我都没有闭源。</p>
+<h3 id="核心技术的考量"><a href="#核心技术的考量" class="headerlink" title="核心技术的考量"></a>核心技术的考量</h3><p>UREngine的核心部分包括：</p>
+<ul>
+<li><strong>CFG优化器</strong>：和传统CFG构建完全不同，经过大量优化，能识别引擎的垃圾代码</li>
+<li><strong>Runtime系统</strong>：语法解析器的核心，这个就不用多说了</li>
+</ul>
+<p>这两部分是否开源要等初版完成后才能决定。毕竟Cpp2CS只是引擎的一部分，还有：</p>
+<ul>
+<li>资源重建模块</li>
+<li>项目重建模块</li>
+<li>…等等</li>
+</ul>
+<hr>
+<h2 id="🔮-未来展望：不止是反编译器"><a href="#🔮-未来展望：不止是反编译器" class="headerlink" title="🔮 未来展望：不止是反编译器"></a>🔮 未来展望：不止是反编译器</h2><p>UREngine的未来方向可能是一个综合的游戏引擎分析工具。想象一下：</p>
+<ul>
+<li>不仅能反编译代码</li>
+<li>还能分析资源结构</li>
+<li>重建完整项目</li>
+<li>提供可视化分析界面</li>
+</ul>
+<p>这就是我心中的”终极游戏分析平台”！</p>
+<hr>
+<h2 id="💭-后记：坚持的意义"><a href="#💭-后记：坚持的意义" class="headerlink" title="💭 后记：坚持的意义"></a>💭 后记：坚持的意义</h2><p>写这篇文章的时候，我想起了那句话：<strong>“路虽远，行则将至；事虽难，做则必成。”</strong></p>
+<p>UREngine的开发路程充满了挑战，但每一次技术突破都让我兴奋不已。也许这就是程序员的浪漫吧——用代码改变世界，哪怕只是改变一个小小的领域。</p>
+<p>如果你也对逆向工程感兴趣，或者想要参与UREngine的开发，欢迎联系我。虽然这条路很难走，但有志同道合的伙伴一起，再难的路也值得！</p>
+<hr>
+<p><em>P.S. 写这篇文章的时候，我又想到了几个优化点，看来今晚又要熬夜写代码了…</em> 😅</p>
+<hr>
+<p><strong>相关链接：</strong></p>
+<ul>
+<li>UREngine技术详解：<a href="UnityReverseEngine-%E7%AA%81%E7%A0%B4%E6%80%A7Unity%E5%8F%8D%E7%BC%96%E8%AF%91%E5%BC%95%E6%93%8E%E6%8A%80%E6%9C%AF%E8%AF%A6%E8%A7%A3">前一篇文章</a></li>
+<li>GitHub Fork分支：<code>github.com/用户名/项目名</code>（具体链接等开源后提供）</li>
+</ul>
+<p><strong>标签：</strong> #UREngine #Unity逆向 #反编译器 #个人开发 #技术心得 </p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/IIIImmmyyy/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/" class="category-chain-item">技术分享</a>
+  
+  
+    <span>></span>
+    
+  <a href="/IIIImmmyyy/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/Unity%E9%80%86%E5%90%91/" class="category-chain-item">Unity逆向</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/IIIImmmyyy/tags/Unity/" class="print-no-link">#Unity</a>
+      
+        <a href="/IIIImmmyyy/tags/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/" class="print-no-link">#逆向工程</a>
+      
+        <a href="/IIIImmmyyy/tags/UREngine/" class="print-no-link">#UREngine</a>
+      
+        <a href="/IIIImmmyyy/tags/%E4%B8%AA%E4%BA%BA%E5%BC%80%E5%8F%91/" class="print-no-link">#个人开发</a>
+      
+        <a href="/IIIImmmyyy/tags/%E9%9A%8F%E8%AE%B0/" class="print-no-link">#随记</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>个人随记：UREngine开发介绍</div>
+      <div>https://iiiimmmyyy.github.io/IIIImmmyyy/2025/01/12/个人随记-UREngine开发介绍/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Imy</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年1月12日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/IIIImmmyyy/2025/06/27/UnityReverseEngine-%E7%AA%81%E7%A0%B4%E6%80%A7Unity%E5%8F%8D%E7%BC%96%E8%AF%91%E5%BC%95%E6%93%8E%E6%8A%80%E6%9C%AF%E8%AF%A6%E8%A7%A3/" title="UnityReverseEngine：突破性的Unity反编译引擎技术详解">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">UnityReverseEngine：突破性的Unity反编译引擎技术详解</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/IIIImmmyyy/js/events.js" ></script>
+<script  src="/IIIImmmyyy/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/IIIImmmyyy/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/IIIImmmyyy/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/IIIImmmyyy/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

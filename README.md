@@ -1,4 +1,4 @@
-# 👋 你好，我是 Imy
+# 👋 你好，我是 IIIImmmyyy
 
 <div align="center">
   <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=30&pause=1000&color=00D4FF&center=true&vCenter=true&width=600&lines=游戏安全研究员;Unity逆向工程师;Frida工具开发者;移动安全" alt="Typing SVG" />
@@ -92,7 +92,8 @@
 
 [![个人网站](https://img.shields.io/badge/🌐_个人网站-4285f4?style=for-the-badge)](https://iiiimmmyyy.github.io/IIIImmmyyy/)
 [![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github)](https://github.com/IIIImmmyyy)
-[![邮箱](https://img.shields.io/badge/📧_联系邮箱-D14836?style=for-the-badge)](mailto:your-email@example.com)
+[![QQ邮箱](https://img.shields.io/badge/📧_QQ邮箱-D14836?style=for-the-badge&logo=gmail)](mailto:295238641@qq.com)
+[![QQ](https://img.shields.io/badge/QQ-295238641-00D4FF?style=for-the-badge&logo=tencentqq)](tencent://message/?uin=295238641)
 
 </div>
 

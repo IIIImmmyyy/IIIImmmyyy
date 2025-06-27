@@ -1,0 +1,345 @@
+#---------------------------
+# Hexo Theme Fluid
+# Author: Fluid-dev
+# Github: https://github.com/fluid-dev/hexo-theme-fluid
+#---------------------------
+
+#---------------------------
+# 全局
+# Global
+#---------------------------
+
+# 用于浏览器标签的图标
+# Icon for browser tab
+favicon: /img/fluid.png
+
+# 浏览器标签页中的标题分隔符，效果： 文章名 - 站点名
+# Title separator in browser tab, eg: article - site
+tab_title_separator: " - "
+
+# 代码块的增强配置
+# Enhancements to code blocks
+code:
+  # 是否开启复制代码的按钮
+  # Enable copy code button
+  copy_btn: true
+  # 代码高亮
+  # Code highlight
+  highlight:
+    enable: true
+    # 代码块是否显示行号
+    # If true, the code block display line numbers
+    line_number: true
+    # 实现高亮的库，对应下面的设置
+    # Highlight library
+    # Options: highlightjs | prismjs
+    lib: "highlightjs"
+    highlightjs:
+      # 在链接中挑选 style 填入
+      # Select a style in the link
+      # See: https://highlightjs.org/demo/
+      style: "github gist"
+      style_dark: "dark"
+
+# 主题暗色模式，开启后菜单中会出现切换按钮
+# Theme dark mode. If enable, a switch button will appear on the menu
+dark_mode:
+  enable: true
+  # 默认的选项（当用户手动切换后则不再按照默认模式）
+  # Default option (when the visitor switches manually, the default mode is no longer followed)
+  # Options: auto | light | dark
+  default: auto
+
+#---------------------------
+# 页头
+# Header
+#---------------------------
+
+# 导航栏的相关配置
+# Navigation bar
+navbar:
+  # 导航栏左侧的标题，为空则按 hexo config 中 `title` 显示
+  # The title on the left side of the navigation bar. If empty, it is based on `title` in hexo config
+  blog_title: ""
+
+  # 导航栏菜单，可自行增减
+  # Navigation bar menu. `key` is used to associate languages/*.yml
+  menu:
+    - { key: "home", link: "/", icon: "iconfont icon-home-fill" }
+    - { key: "archive", link: "/archives/", icon: "iconfont icon-archive-fill" }
+    - { key: "category", link: "/categories/", icon: "iconfont icon-category-fill" }
+    - { key: "tag", link: "/tags/", icon: "iconfont icon-tags-fill" }
+    - { key: "about", link: "/about/", icon: "iconfont icon-user-fill" }
+
+# 搜索功能，基于 hexo-generator-search 插件
+# Search feature, based on hexo-generator-search
+search:
+  enable: true
+  # 搜索索引文件的路径，可以是相对路径或外站的绝对路径
+  # Path for search index file, it can be a relative path or an absolute path
+  path: /local-search.xml
+  # 文件生成在本地的位置，必须是相对路径
+  # The location where the index file is generated locally
+  generate_path: /local-search.xml
+  # 搜索的范围
+  # Search field
+  # Options: post | page | all
+  field: post
+  # 搜索是否扫描正文
+  # If true, search will scan the post content
+  content: true
+
+# 首屏图片的相关配置
+# Config of the big image on the first screen
+banner:
+  # 视差滚动，图片与板块会随着屏幕滚动产生视差效果
+  # Scrolling parallax
+  parallax: true
+  # 图片最小的宽高比，以免图片两边被过度裁剪
+  # Minimum ratio of width to height
+  width_height_ratio: 1.0
+
+#---------------------------
+# 页脚
+# Footer
+#---------------------------
+footer:
+  # 页脚第一行文字的 HTML，建议保留 Fluid 的链接
+  # HTML of the first line of the footer
+  content: '
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+  '
+  # 展示网站的 PV、UV 统计数
+  # Display website PV and UV statistics
+  statistics:
+    enable: false
+
+#---------------------------
+# 首页
+# Home Page
+#---------------------------
+index:
+  # 首页 Banner 头图
+  # Path of Banner image
+  banner_img: /img/default.png
+  # 头图高度，屏幕百分比
+  # Height ratio of banner image
+  # Available: 0 - 100
+  banner_img_height: 100
+  # 头图黑色蒙版的不透明度
+  # Opacity of the banner mask
+  # Available: 0 - 1.0
+  banner_mask_alpha: 0.3
+
+  # 首页副标题的独立设置
+  # Independent config of home page subtitle
+  slogan:
+    enable: true
+    # 为空则按 hexo config.subtitle 显示
+    # If empty, text based on `subtitle` in hexo config
+    text: "逆向爱好者"
+
+  # 自动截取文章摘要
+  # Auto extract post
+  auto_excerpt:
+    enable: true
+
+  # 打开文章的标签方式
+  # The browser tag to open the post
+  # Available: _blank | _self
+  post_url_target: _self
+
+  # 是否显示文章信息（时间、分类、标签）
+  # Meta information of post
+  post_meta:
+    date: true
+    category: true
+    tag: true
+
+#---------------------------
+# 文章页
+# Post Page
+#---------------------------
+post:
+  banner_img: /img/default.png
+  banner_img_height: 70
+  banner_mask_alpha: 0.3
+
+  # 文章标题下方的元信息
+  # Meta information below title
+  meta:
+    # 作者，优先根据 front-matter 里 author 字段
+    # Author, based on `author` field in front-matter
+    author:
+      enable: false
+    # 文章日期，优先根据 front-matter 里 date 字段
+    # Post date, based on `date` field in front-matter
+    date:
+      enable: true
+      format: "LL a"
+    # 字数统计
+    # Word count
+    wordcount:
+      enable: true
+    # 估计阅读全文需要的时长
+    # Estimated reading time
+    min2read:
+      enable: true
+      # 每个字词的长度，建议：中文≈2，英文≈5
+      # Average word length (chars count in word)
+      awl: 2
+      # 每分钟阅读字数
+      # Words per minute
+      wpm: 60
+    # 浏览量计数
+    # Number of visits
+    views:
+      enable: false
+
+  # 侧边栏展示文章目录
+  # Table of contents (TOC) in the sidebar
+  toc:
+    enable: true
+    # 置于板块的左侧或右侧
+    # place in the board
+    # Options: left | right
+    placement: right
+    # 目录会选择这些节点作为标题
+    # TOC will select these nodes as headings
+    headingSelector: "h1,h2,h3,h4,h5,h6"
+    # 层级的折叠深度
+    # Collapse depth
+    collapseDepth: 0
+
+  # 版权声明，会显示在每篇文章的结尾
+  # Copyright, will be displayed at the end of each post
+  copyright:
+    enable: true
+    # CreativeCommons license
+    # Options: BY | BY-SA | BY-ND | BY-NC | BY-NC-SA | BY-NC-ND
+    license: 'BY'
+    # 显示作者
+    author:
+      enable: true
+    # 显示发布日期
+    # Show post date
+    post_date:
+      enable: true
+      format: "LL"
+    # 显示更新日期
+    # Show update date
+    update_date:
+      enable: false
+      format: "LL"
+
+  # 评论插件
+  # Comment plugin
+  comments:
+    enable: false
+    # 指定的插件
+    # The specified plugin
+    type: disqus
+
+#---------------------------
+# 归档页
+# Archive Page
+#---------------------------
+archive:
+  banner_img: /img/default.png
+  banner_img_height: 60
+  banner_mask_alpha: 0.3
+
+#---------------------------
+# 分类页
+# Category Page
+#---------------------------
+category:
+  enable: true
+  banner_img: /img/default.png
+  banner_img_height: 60
+  banner_mask_alpha: 0.3
+  # 分类的排序字段，前面带减号是倒序
+  # Sort field for categories
+  # Options: length | name
+  order_by: "-length"
+  # 层级的折叠深度
+  # Collapse depth
+  collapse_depth: 0
+  # 文章的排序字段，前面带减号是倒序
+  # Sort field for posts
+  # Options: date | title | or other field of front-matter
+  post_order_by: "-date"
+  # 单个分类中折叠展示文章数的最大值
+  # The maximum number of posts in a single category
+  post_limit: 10
+
+#---------------------------
+# 标签页
+# Tag Page
+#---------------------------
+tag:
+  enable: true
+  banner_img: /img/default.png
+  banner_img_height: 80
+  banner_mask_alpha: 0.3
+  tagcloud:
+    min_font: 15
+    max_font: 30
+    unit: px
+    start_color: "#BBBBEE"
+    end_color: "#337ab7"
+
+#---------------------------
+# 关于页
+# About Page
+#---------------------------
+about:
+  enable: true
+  banner_img: /img/default.png
+  banner_img_height: 60
+  banner_mask_alpha: 0.3
+  avatar: /img/avatar.png
+  name: "Imy"
+  intro: "移动端逆向工程专家 | Frida脚本开发者 | 反混淆技术研究员"
+  # 更多图标可从 https://fontawesome.com/icons 查找
+  icons:
+    - { class: "iconfont icon-github-fill", link: "https://github.com/IIIImmmyyy", tip: "GitHub" }
+    - { class: "iconfont icon-mail-fill", link: "mailto:295238641@qq.com", tip: "邮箱" }
+    - { class: "iconfont icon-home-fill", link: "https://iiiimmmyyy.github.io/ImyBlog/", tip: "个人博客" }
+
+#---------------------------
+# 自定义页
+# Custom Page
+#---------------------------
+page:
+  banner_img: /img/default.png
+  banner_img_height: 60
+  banner_mask_alpha: 0.3
+
+#---------------------------
+# 404页
+# 404 Page
+#---------------------------
+page404:
+  enable: true
+  banner_img: /img/default.png
+  banner_img_height: 85
+  banner_mask_alpha: 0.3
+  # 重定向到首页的延迟(毫秒)
+  # Delay in redirecting to home page (milliseconds)
+  redirect_delay: 5000
+
+# 指定自定义 .js 文件路径，支持列表
+# Specify the path of your custom js file
+custom_js:
+
+# 指定自定义 .css 文件路径，用法和 custom_js 相同
+# The usage is the same as custom_js
+custom_css:
+
+# 网页访问统计
+# Analysis of website visitors
+web_analytics:
+  enable: false 

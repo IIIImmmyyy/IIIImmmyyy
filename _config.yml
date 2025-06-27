@@ -13,7 +13,8 @@ timezone: 'Asia/Shanghai'
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: https://yourusername.github.io  # 请替换 yourusername 为您的实际GitHub用户名
+url: https://iiiimmmyyy.github.io/IIIImmmyyy/
+root: /IIIImmmyyy/
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 pretty_urls:
@@ -103,5 +104,5 @@ theme: fluid
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: git
-  repo: https://github.com/yourusername/yourusername.github.io.git  # 请替换为您的实际仓库地址
+  repo: https://github.com/IIIImmmyyy/IIIImmmyyy.github.io.git  # 请替换为您的实际仓库地址
   branch: main

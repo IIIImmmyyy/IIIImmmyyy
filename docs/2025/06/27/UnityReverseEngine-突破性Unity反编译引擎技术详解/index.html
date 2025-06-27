@@ -31,10 +31,10 @@
 <meta property="article:author" content="Imy">
 <meta property="article:tag" content="Unity">
 <meta property="article:tag" content="逆向工程">
+<meta property="article:tag" content="UREngine">
 <meta property="article:tag" content="IL2CPP">
 <meta property="article:tag" content="ARM64">
 <meta property="article:tag" content="反编译">
-<meta property="article:tag" content="UREngine">
 <meta name="twitter:card" content="summary_large_image">
   
   
@@ -641,13 +641,13 @@
       
         <a href="/IIIImmmyyy/tags/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/" class="print-no-link">#逆向工程</a>
       
+        <a href="/IIIImmmyyy/tags/UREngine/" class="print-no-link">#UREngine</a>
+      
         <a href="/IIIImmmyyy/tags/IL2CPP/" class="print-no-link">#IL2CPP</a>
       
         <a href="/IIIImmmyyy/tags/ARM64/" class="print-no-link">#ARM64</a>
       
         <a href="/IIIImmmyyy/tags/%E5%8F%8D%E7%BC%96%E8%AF%91/" class="print-no-link">#反编译</a>
-      
-        <a href="/IIIImmmyyy/tags/UREngine/" class="print-no-link">#UREngine</a>
       
     </div>
   
@@ -720,6 +720,50 @@
             </div>
 
             
+  
+  
+    <article id="comments" lazyload>
+      
+    <div id="giscus" class="giscus"></div>
+    <script type="text/javascript">
+      Fluid.utils.loadComments('#giscus', function() {
+        var options = {"repo":"IIIImmmyyy/IIIImmmyyy","repo-id":"R_kgDOPCnLXA","category":"Announcements","category-id":"DIC_kwDOPCnLXM4CsGT7","theme-light":"light","theme-dark":"dark","mapping":"pathname","reactions-enabled":1,"emit-metadata":0,"input-position":"bottom","lang":"zh-CN","theme":"preferred_color_scheme"};
+        var attributes = {};
+        for (let option in options) {
+          if (!option.startsWith('theme-')) {
+            var key = option.startsWith('data-') ? option : 'data-' + option;
+            attributes[key] = options[option];
+          }
+        }
+        var light = 'light';
+        var dark = 'dark';
+        window.GiscusThemeLight = light;
+        window.GiscusThemeDark = dark;
+        attributes['data-theme'] = document.documentElement.getAttribute('data-user-color-scheme') === 'dark' ? dark : light;
+        for (let attribute in attributes) {
+          var value = attributes[attribute];
+          if (value === undefined || value === null || value === '') {
+            delete attributes[attribute];
+          }
+        }
+        var s = document.createElement('script');
+        s.setAttribute('src', 'https://giscus.app/client.js');
+        s.setAttribute('crossorigin', 'anonymous');
+        for (let attribute in attributes) {
+          s.setAttribute(attribute, attributes[attribute]);
+        }
+        var ss = document.getElementsByTagName('script');
+        var e = ss.length > 0 ? ss[ss.length - 1] : document.head || document.documentElement;
+        e.parentNode.insertBefore(s, e.nextSibling);
+      });
+    </script>
+    <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
           </article>
         </div>
       </div>

@@ -237,10 +237,10 @@ post:
   # 评论插件
   # Comment plugin
   comments:
-    enable: false
+    enable: true
     # 指定的插件
     # The specified plugin
-    type: disqus
+    type: giscus
 
 #---------------------------
 # 归档页
@@ -342,4 +342,23 @@ custom_css:
 # 网页访问统计
 # Analysis of website visitors
 web_analytics:
-  enable: false 
+  enable: false
+
+# Giscus评论系统配置
+giscus:
+  repo: IIIImmmyyy/IIIImmmyyy
+  repo-id: R_kgDOPCnLXA
+  category: Announcements
+  category-id: DIC_kwDOPCnLXM4CsGT7
+  # Available values: pathname | url | title | og:title
+  mapping: pathname
+  # Available values: 0 | 1
+  reactions-enabled: 1
+  # Available values: 0 | 1
+  emit-metadata: 0
+  # Available values: light | dark | dark_high_contrast | transparent_dark | preferred-color-scheme
+  theme: preferred_color_scheme
+  # Available values: en | zh-CN
+  lang: zh-CN
+  # Place the comment box above the comments
+  input-position: bottom 

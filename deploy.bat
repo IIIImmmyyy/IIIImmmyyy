@@ -25,7 +25,7 @@ if errorlevel 1 (
 echo ✅ 缓存清理完成
 
 :: 步骤2: 生成静态文件
-echo 🔨 生成静态文件...
+echo [INFO] Generating static files...
 call npx hexo generate
 if errorlevel 1 (
     echo ❌ 生成静态文件失败
@@ -35,7 +35,7 @@ if errorlevel 1 (
 echo ✅ 静态文件生成完成
 
 :: 步骤3: 复制到docs文件夹
-echo 📁 复制文件到docs文件夹...
+echo [INFO] Copying files to docs folder...
 if not exist "docs" mkdir docs
 xcopy /E /I /Y "public\*" "docs\"
 if errorlevel 1 (

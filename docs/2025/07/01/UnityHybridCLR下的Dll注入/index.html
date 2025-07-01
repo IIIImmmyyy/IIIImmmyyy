@@ -227,7 +227,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.2k 字
+          2.3k 字
         
       </span>
     
@@ -339,7 +339,7 @@
 
 <h4 id="脚本热替换技术"><a href="#脚本热替换技术" class="headerlink" title="脚本热替换技术"></a>脚本热替换技术</h4><p>这个一个有趣的功能，可以替换原脚本逻辑，实现和Hook一致的效果：</p>
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">GameApi</span><br>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Init</span>()</span><br>    &#123;<br>        AndroidLogger.LogInfo(<span class="hljs-string">&quot;GameApi&quot;</span>, <span class="hljs-string">&quot;开始执行脚本替换&quot;</span>);<br>        <br>        <span class="hljs-keyword">await</span> Task.Delay(<span class="hljs-number">30000</span>);<br>        AndroidLogger.LogInfo(<span class="hljs-string">&quot;GameApi&quot;</span>, <span class="hljs-string">&quot;游戏环境准备完成&quot;</span>);<br>        <br>        <span class="hljs-keyword">var</span> playerObject = GameObject.Find(<span class="hljs-string">&quot;Player_shadow&quot;</span>);<br>        <span class="hljs-keyword">if</span> (playerObject != <span class="hljs-literal">null</span>)<br>        &#123;<br>            <span class="hljs-comment">// 移除原有脚本</span><br>            UnityEngine.Object.Destroy(playerObject.GetComponent&lt;AIScript&gt;());<br>            AndroidLogger.LogInfo(<span class="hljs-string">&quot;GameApi&quot;</span>, <span class="hljs-string">&quot;原有AIScript已移除&quot;</span>);<br>            <br>            <span class="hljs-comment">// 添加增强版脚本（包含完整的原逻辑扩展）</span><br>            playerObject.AddComponent&lt;EnhancedAIScript&gt;();<br>            AndroidLogger.LogInfo(<span class="hljs-string">&quot;GameApi&quot;</span>, <span class="hljs-string">&quot;增强版AI脚本已注入&quot;</span>);<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-
+<h4 id="更多功能由你自己决定"><a href="#更多功能由你自己决定" class="headerlink" title="更多功能由你自己决定"></a>更多功能由你自己决定</h4><p>商业级的解决方案提供了各项Api访问的能力，完全可以实现各种各样的功能。这和原生开发是没有区别的。</p>
 <hr>
 <h2 id="🔧-相关工具和资源"><a href="#🔧-相关工具和资源" class="headerlink" title="🔧 相关工具和资源"></a>🔧 相关工具和资源</h2><h3 id="Native-Hook支持"><a href="#Native-Hook支持" class="headerlink" title="Native Hook支持"></a>Native Hook支持</h3><p>对于需要底层Hook功能的高级场景，推荐使用：</p>
 <ul>
@@ -453,7 +453,7 @@
 </ul>
 <hr>
 <h2 id="📝-总结"><a href="#📝-总结" class="headerlink" title="📝 总结"></a>📝 总结</h2><p>Unity HybridCLR环境下的Dll注入技术为逆向工程提供了强大的能力。从基础的反射方案到我们的企业级解决方案，每种技术都有其适用的场景。选择合适的方案需要综合考虑项目需求、性能要求和开发成本。</p>
-<p>如果您对我们的技术方案感兴趣，或有任何技术问题，欢迎随时联系讨论！<br>联系方式：QQ 295238641<br>邮箱 ： <a href="mailto:&#50;&#x39;&#53;&#x32;&#51;&#56;&#x36;&#x34;&#49;&#x40;&#113;&#113;&#x2e;&#99;&#x6f;&#x6d;">295238641@qq.com</a> </p>
+<p>如果您对我们的技术方案感兴趣，或有任何技术问题，欢迎随时联系讨论！<br>联系方式：QQ 295238641<br>邮箱 ： <a href="mailto:&#x32;&#57;&#53;&#50;&#51;&#x38;&#x36;&#x34;&#49;&#x40;&#x71;&#113;&#46;&#x63;&#111;&#109;">295238641@qq.com</a> </p>
 
                 
               </div>

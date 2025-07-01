@@ -246,7 +246,7 @@ public class CustomTestScript : MonoBehaviour
 
 #### 脚本热替换技术
 
-实现运行时的脚本热替换，完全重写游戏逻辑：
+这个一个有趣的功能，可以替换原脚本逻辑，实现和Hook一致的效果：
 
 ```csharp
 public class GameApi

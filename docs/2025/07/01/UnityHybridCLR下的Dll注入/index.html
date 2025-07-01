@@ -1,0 +1,831 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/IIIImmmyyy/img/fluid.png">
+  <link rel="icon" href="/IIIImmmyyy/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Imy">
+  <meta name="keywords" content="Unity, HybridCLR, Dll注入, IL2CPP, 逆向工程, 热更新">
+  
+    <meta name="description" content="深入探讨Unity HybridCLR环境下的Dll注入技术，从基础方案到终极解决方案的完整实践指南">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Unity HybridCLR环境下的高级Dll注入技术详解">
+<meta property="og:url" content="https://iiiimmmyyy.github.io/IIIImmmyyy/2025/07/01/UnityHybridCLR%E4%B8%8B%E7%9A%84Dll%E6%B3%A8%E5%85%A5/index.html">
+<meta property="og:site_name" content="Imy">
+<meta property="og:description" content="深入探讨Unity HybridCLR环境下的Dll注入技术，从基础方案到终极解决方案的完整实践指南">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-07-01T06:30:00.000Z">
+<meta property="article:modified_time" content="2025-07-01T06:30:00.000Z">
+<meta property="article:author" content="Imy">
+<meta property="article:tag" content="Unity">
+<meta property="article:tag" content="HybridCLR">
+<meta property="article:tag" content="逆向工程">
+<meta property="article:tag" content="Dll注入">
+<meta property="article:tag" content="IL2CPP">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Unity HybridCLR环境下的高级Dll注入技术详解 - Imy</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/IIIImmmyyy/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/IIIImmmyyy/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/IIIImmmyyy/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"iiiimmmyyy.github.io","root":"/IIIImmmyyy/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/IIIImmmyyy/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/IIIImmmyyy/js/utils.js" ></script>
+  <script  src="/IIIImmmyyy/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/IIIImmmyyy/">
+      <strong>Imy</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/IIIImmmyyy/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/IIIImmmyyy/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/IIIImmmyyy/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/IIIImmmyyy/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/IIIImmmyyy/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/IIIImmmyyy/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Unity HybridCLR环境下的高级Dll注入技术详解"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-07-01 14:30" pubdate>
+          2025年7月1日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          15 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Unity HybridCLR环境下的高级Dll注入技术详解</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="📖-引言"><a href="#📖-引言" class="headerlink" title="📖 引言"></a>📖 引言</h2><h3 id="什么是Unity-HybridCLR？"><a href="#什么是Unity-HybridCLR？" class="headerlink" title="什么是Unity HybridCLR？"></a>什么是Unity HybridCLR？</h3><p>Unity HybridCLR是一个革命性的Unity热更新解决方案。它在高度兼容Unity原生IL2CPP的基础上，实现了一套高性能的解释器来执行C#代码，为Unity开发者提供了完整的C#热更新能力。</p>
+<hr>
+<h2 id="🔍-HybridCLR对逆向工程的影响"><a href="#🔍-HybridCLR对逆向工程的影响" class="headerlink" title="🔍 HybridCLR对逆向工程的影响"></a>🔍 HybridCLR对逆向工程的影响</h2><h3 id="核心机制变化"><a href="#核心机制变化" class="headerlink" title="核心机制变化"></a>核心机制变化</h3><p>由于HybridCLR的引入，Unity应用的编译机制发生了重大变化：</p>
+<ol>
+<li><strong>预处理机制</strong>：在编译dll的过程中，HybridCLR会对dll进行预处理，生成大量的占位函数</li>
+<li><strong>桥接函数</strong>：这些占位函数是为了桥接到解释器而准备的</li>
+<li><strong>地址重用</strong>：这解释了为什么在DumpCS时会看到大量同签名函数指向同一个地址的现象</li>
+</ol>
+<p><strong>典型表现：</strong></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">// RVA: 0x105CEC4  invoke : 0x105CEC4  VA: 0x7D5BCA1EC4</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">bool</span> <span class="hljs-title">IsActive</span>(<span class="hljs-params">PanelCfg panelCfg</span>)</span> &#123; <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>; &#125;<br><br><span class="hljs-comment">// RVA: 0x1063E34  invoke : 0x1063E34  VA: 0x7D5BCA8E34</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> UIBase <span class="hljs-title">GetPanel</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> componentName</span>)</span> &#123; <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>; &#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="解释器执行机制"><a href="#解释器执行机制" class="headerlink" title="解释器执行机制"></a>解释器执行机制</h3><p>所有占位函数最终都会进入解释器的Execute方法中执行：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">namespace</span> hybridclr &#123;<br>    <span class="hljs-keyword">namespace</span> interpreter &#123;<br>        <span class="hljs-keyword">class</span> <span class="hljs-title class_">Interpreter</span> &#123;<br>        <span class="hljs-keyword">public</span>:<br>            <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-title">Execute</span><span class="hljs-params">(<span class="hljs-type">const</span> MethodInfo *methodInfo, StackObject *args, <span class="hljs-type">void</span> *ret)</span></span>;<br>        &#125;;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="逆向工程的挑战"><a href="#逆向工程的挑战" class="headerlink" title="逆向工程的挑战"></a>逆向工程的挑战</h3><p>在HybridCLR环境下，传统的Hook方案面临新的挑战：</p>
+<ul>
+<li><strong>解释器劫持</strong>：需要Hook解释器而非具体函数</li>
+<li><strong>复杂性增加</strong>：调试和分析难度显著提升</li>
+<li><strong>方案选择</strong>：需要在多种技术方案中选择最适合的</li>
+</ul>
+<hr>
+<h2 id="🛠️-解决方案详解"><a href="#🛠️-解决方案详解" class="headerlink" title="🛠️ 解决方案详解"></a>🛠️ 解决方案详解</h2><h3 id="方案：利用HybridCLR热更新Dll注入"><a href="#方案：利用HybridCLR热更新Dll注入" class="headerlink" title="方案：利用HybridCLR热更新Dll注入"></a>方案：利用HybridCLR热更新Dll注入</h3><h4 id="1-创建热更新Dll"><a href="#1-创建热更新Dll" class="headerlink" title="1. 创建热更新Dll"></a>1. 创建热更新Dll</h4><p>首先创建一个HybridCLR项目，按照官方文档创建热更dll：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">GameApi</span><br>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Init</span>()</span><br>    &#123;<br>        AndroidLogger.LogInfo(<span class="hljs-string">&quot;GameApi&quot;</span>, <span class="hljs-string">&quot;GameApi 初始化完成&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="2-部署热更新Dll"><a href="#2-部署热更新Dll" class="headerlink" title="2. 部署热更新Dll"></a>2. 部署热更新Dll</h4><p>编译完成后，将<code>HotUpdate.dll</code>推送到目标设备的沙盒目录：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">/data/data/xxx.xxx.xxx/HotUpdate.dll<br></code></pre></td></tr></table></figure>
+
+<h4 id="3-C-注入实现"><a href="#3-C-注入实现" class="headerlink" title="3. C++注入实现"></a>3. C++注入实现</h4><p>编写C++代码完成对热更新dll的注入：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// 读取热更新dll文件</span><br>Unity::Il2CppByteArray *pArray = <span class="hljs-built_in">ReadAllBytes</span>(<br>    Unity::Il2CppStringProxy::<span class="hljs-built_in">New</span>(<span class="hljs-string">&quot;/data/data/com.ffcf.lt/files/HotUpdate.dll&quot;</span>));<br><br><span class="hljs-type">int</span> arrayLength = Unity::ArrayProxy::<span class="hljs-built_in">Length</span>(pArray);<br>Unity::AppDomain *domain = Unity::AppDomain::<span class="hljs-built_in">CurrentDomain</span>();<br><br><span class="hljs-comment">// 加载热更新dll</span><br>Unity::Assembly *loadedAssembly = <span class="hljs-built_in">LoadDll</span>(domain, pArray);<br>Il2CppString *assemblyName = loadedAssembly-&gt;<span class="hljs-built_in">GetSimpleName</span>();<br><br><span class="hljs-comment">// 获取类型和方法</span><br>Unity::SystemType *gameApiType = loadedAssembly-&gt;<span class="hljs-built_in">GetType</span>(<br>    Unity::Il2CppStringProxy::<span class="hljs-built_in">New</span>(<span class="hljs-string">&quot;GameApi&quot;</span>));<br><br><span class="hljs-keyword">if</span> (gameApiType) &#123;<br>    Unity::SystemMethodInfo *initMethod = gameApiType-&gt;<span class="hljs-built_in">GetMethod</span>(<br>        Unity::Il2CppStringProxy::<span class="hljs-built_in">New</span>(<span class="hljs-string">&quot;Init&quot;</span>));<br>    <span class="hljs-keyword">if</span> (initMethod) &#123;<br>        initMethod-&gt;<span class="hljs-built_in">Invoke</span>();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="4-验证注入结果"><a href="#4-验证注入结果" class="headerlink" title="4. 验证注入结果"></a>4. 验证注入结果</h4><p>运行游戏后，控制台输出：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">2025</span>-<span class="hljs-number">07</span>-<span class="hljs-number">01</span> <span class="hljs-number">13</span>:<span class="hljs-number">57</span>:<span class="hljs-number">12</span>.<span class="hljs-number">782</span>  <span class="hljs-number">2136</span>-<span class="hljs-number">2175</span>  GameApi  com.ffcf.lt  I  GameApi 初始化完成<br></code></pre></td></tr></table></figure>
+
+<h4 id="5-跨域函数调用"><a href="#5-跨域函数调用" class="headerlink" title="5. 跨域函数调用"></a>5. 跨域函数调用</h4><p>成功注入热更新dll后，如何调用热更dll中或非热更dll中的函数？答案是使用反射机制：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">TestUIManagerAccess</span>()</span><br>&#123;<br>    AndroidLogger.LogInfo(<span class="hljs-string">&quot;GameApi&quot;</span>, <span class="hljs-string">&quot;--- 开始测试UIManager访问 ---&quot;</span>);<br><br>    <span class="hljs-keyword">try</span><br>    &#123;<br>        <span class="hljs-comment">// 获取类型信息</span><br>        <span class="hljs-keyword">var</span> uiManagerType = SmartReflection.FromType(<span class="hljs-string">&quot;UIManager&quot;</span>, <span class="hljs-string">&quot;Assembly-CSharp&quot;</span>);<br>        <span class="hljs-keyword">var</span> panelType = SmartReflection.FromType(<span class="hljs-string">&quot;UIPanelType&quot;</span>, <span class="hljs-string">&quot;Assembly-CSharp&quot;</span>);<br>        <br>        <span class="hljs-comment">// 获取静态成员</span><br>        <span class="hljs-keyword">var</span> instance = uiManagerType?.GetValue(<span class="hljs-string">&quot;Instance&quot;</span>);<br>        <span class="hljs-keyword">var</span> uiBagValue = panelType?.GetValue(<span class="hljs-string">&quot;UIBag&quot;</span>);<br>      <br>        <span class="hljs-comment">// 空值检查</span><br>        <span class="hljs-keyword">if</span> (instance == <span class="hljs-literal">null</span> || uiBagValue == <span class="hljs-literal">null</span>)<br>        &#123;<br>            AndroidLogger.LogError(<span class="hljs-string">&quot;GameApi&quot;</span>, <span class="hljs-string">&quot;无法获取必要的对象或值&quot;</span>);<br>            <span class="hljs-keyword">return</span>;<br>        &#125;<br>        <br>        <span class="hljs-comment">// 包装调用</span><br>        <span class="hljs-keyword">var</span> uiManagerWrapper = SmartReflection.FromInstance(instance);<br>        uiManagerWrapper.Call(<span class="hljs-string">&quot;ShowPanel&quot;</span>, uiBagValue, <span class="hljs-literal">null</span>, <span class="hljs-literal">null</span>, <span class="hljs-literal">false</span>, <span class="hljs-literal">null</span>);<br>        <br>        AndroidLogger.LogInfo(<span class="hljs-string">&quot;GameApi&quot;</span>, <span class="hljs-string">&quot;UIManager调用成功&quot;</span>);<br>    &#125;<br>    <span class="hljs-keyword">catch</span> (Exception ex)<br>    &#123;<br>        AndroidLogger.LogError(<span class="hljs-string">&quot;GameApi&quot;</span>, <span class="hljs-string">$&quot;UIManager访问测试失败: <span class="hljs-subst">&#123;ex.Message&#125;</span>&quot;</span>, ex);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="方案局限性"><a href="#方案局限性" class="headerlink" title="方案局限性"></a>方案局限性</h4><p>虽然反射方案能够实现目标功能，但存在明显的缺陷：</p>
+<ul>
+<li><strong>性能开销</strong>：反射调用的性能损耗较大</li>
+<li><strong>开发体验</strong>：代码可读性差，维护困难</li>
+<li><strong>类型安全</strong>：缺乏编译时类型检查</li>
+</ul>
+<h3 id="终极解决方案"><a href="#终极解决方案" class="headerlink" title="终极解决方案"></a>终极解决方案</h3><h4 id="核心思路"><a href="#核心思路" class="headerlink" title="核心思路"></a>核心思路</h4><p>在.NET中，函数调用依赖于签名信息。我们可以构建dll的签名信息，将其依赖到注入dll中，实现与正向开发完全一致的体验。</p>
+<h4 id="技术挑战"><a href="#技术挑战" class="headerlink" title="技术挑战"></a>技术挑战</h4><p>需要解决以下关键问题：</p>
+<ol>
+<li><strong>Unity Dll依赖</strong>：获取Unity编辑器中的dll依赖关系</li>
+<li><strong>Assembly-CSharp.dll冲突</strong>：解决如何生成注入dll时的Assembly-CSharp.dll冲突问题</li>
+<li><strong>跨域调用</strong>：处理不同程序域之间的调用问题</li>
+</ol>
+<h4 id="最终效果"><a href="#最终效果" class="headerlink" title="最终效果"></a>最终效果</h4><p>解决上述问题后，代码变得极其简洁和直观：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">GameApi</span><br>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Init</span>()</span><br>    &#123;<br>        AndroidLogger.LogInfo(<span class="hljs-string">&quot;GameApi&quot;</span>, <span class="hljs-string">&quot;GameApi 开始初始化&quot;</span>);<br><br>        <span class="hljs-comment">// 等待游戏完全加载</span><br>        <span class="hljs-keyword">await</span> Task.Delay(<span class="hljs-number">30000</span>);<br>        AndroidLogger.LogInfo(<span class="hljs-string">&quot;GameApi&quot;</span>, <span class="hljs-string">&quot;GameApi 初始化完成&quot;</span>);<br>        <br>        <span class="hljs-comment">// 直接访问游戏对象，如同正向开发</span><br>        <span class="hljs-keyword">var</span> uiManager = UnitySingleton&lt;UIManager&gt;.Instance;<br>        AndroidLogger.LogInfo(<span class="hljs-string">&quot;GameApi&quot;</span>, <span class="hljs-string">$&quot;UIManager实例获取成功: <span class="hljs-subst">&#123;uiManager&#125;</span>&quot;</span>);<br>        <br>        <span class="hljs-comment">// 调用游戏方法</span><br>        uiManager.ShowPanel(UIPanelType.UIBag);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="动态脚本注入"><a href="#动态脚本注入" class="headerlink" title="动态脚本注入"></a>动态脚本注入</h4><p>甚至可以动态添加自定义脚本到游戏对象：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">// 查找游戏对象并添加自定义脚本</span><br><span class="hljs-keyword">var</span> playerObject = GameObject.Find(<span class="hljs-string">&quot;Player_shadow&quot;</span>);<br>playerObject.AddComponent&lt;CustomTestScript&gt;();<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">CustomTestScript</span> : <span class="hljs-title">MonoBehaviour</span><br>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Start</span>()</span><br>    &#123;<br>        AndroidLogger.LogDebug(<span class="hljs-string">&quot;CustomTestScript&quot;</span>, <span class="hljs-string">&quot;脚本启动成功&quot;</span>);<br>    &#125;<br>    <br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Update</span>()</span><br>    &#123;<br>        AndroidLogger.LogDebug(<span class="hljs-string">&quot;CustomTestScript&quot;</span>, <span class="hljs-string">&quot;Update方法执行中&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>执行结果：</strong></p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">2025</span>-<span class="hljs-number">07</span>-<span class="hljs-number">01</span> <span class="hljs-number">14</span>:<span class="hljs-number">08</span>:<span class="hljs-number">08</span>.<span class="hljs-number">547</span>  <span class="hljs-number">2371</span>-<span class="hljs-number">2409</span>  CustomTestScript  com.ffcf.lt  D  脚本启动成功<br><span class="hljs-attribute">2025</span>-<span class="hljs-number">07</span>-<span class="hljs-number">01</span> <span class="hljs-number">14</span>:<span class="hljs-number">08</span>:<span class="hljs-number">08</span>.<span class="hljs-number">580</span>  <span class="hljs-number">2371</span>-<span class="hljs-number">2409</span>  CustomTestScript  com.ffcf.lt  D  Update方法执行中<br></code></pre></td></tr></table></figure>
+
+<h4 id="高级应用场景"><a href="#高级应用场景" class="headerlink" title="高级应用场景"></a>高级应用场景</h4><p><strong>脚本热替换：</strong></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">GameApi</span><br>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Init</span>()</span><br>    &#123;<br>        AndroidLogger.LogInfo(<span class="hljs-string">&quot;GameApi&quot;</span>, <span class="hljs-string">&quot;开始执行脚本替换&quot;</span>);<br>        <br>        <span class="hljs-keyword">await</span> Task.Delay(<span class="hljs-number">30000</span>);<br>        AndroidLogger.LogInfo(<span class="hljs-string">&quot;GameApi&quot;</span>, <span class="hljs-string">&quot;游戏环境准备完成&quot;</span>);<br>        <br>        <span class="hljs-keyword">var</span> playerObject = GameObject.Find(<span class="hljs-string">&quot;Player_shadow&quot;</span>);<br>        <span class="hljs-keyword">if</span> (playerObject != <span class="hljs-literal">null</span>)<br>        &#123;<br>            <span class="hljs-comment">// 移除原有脚本</span><br>            UnityEngine.Object.Destroy(playerObject.GetComponent&lt;AIScript&gt;());<br>            AndroidLogger.LogInfo(<span class="hljs-string">&quot;GameApi&quot;</span>, <span class="hljs-string">&quot;原有AIScript已移除&quot;</span>);<br>            <br>            <span class="hljs-comment">// 添加自定义脚本（包含从AIScript复制的逻辑）</span><br>            playerObject.AddComponent&lt;EnhancedAIScript&gt;();<br>            AndroidLogger.LogInfo(<span class="hljs-string">&quot;GameApi&quot;</span>, <span class="hljs-string">&quot;增强版AI脚本已注入&quot;</span>);<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="🔧-相关工具和资源"><a href="#🔧-相关工具和资源" class="headerlink" title="🔧 相关工具和资源"></a>🔧 相关工具和资源</h2><h3 id="Hook支持"><a href="#Hook支持" class="headerlink" title="Hook支持"></a>Hook支持</h3><p>对于需要Hook功能的场景，推荐使用：</p>
+<ul>
+<li><strong>项目地址</strong>：<a target="_blank" rel="noopener" href="https://github.com/IIIImmmyyy/HybridClrHookNative">HybridClrHookNative</a></li>
+<li><strong>功能</strong>：提供Native层对CLR Hook的完整支持</li>
+<li><strong>注意</strong>：由于依赖inline特征，并不能保证每个游戏都兼容</li>
+</ul>
+<h3 id="替代方案"><a href="#替代方案" class="headerlink" title="替代方案"></a>替代方案</h3><p>除了传统Hook外，Dll注入方案还支持：</p>
+<ol>
+<li><strong>动态代理Hook</strong>：通过代理模式实现函数拦截</li>
+<li><strong>脚本替换</strong>：移除原脚本，注入增强版本</li>
+<li><strong>逻辑重写</strong>：完全重写游戏逻辑部分</li>
+</ol>
+<hr>
+<h2 id="💼-商业化解决方案"><a href="#💼-商业化解决方案" class="headerlink" title="💼 商业化解决方案"></a>💼 商业化解决方案</h2><h3 id="完整解决方案"><a href="#完整解决方案" class="headerlink" title="完整解决方案"></a>完整解决方案</h3><p>如果您需要获得在HybridCLR环境下与正向开发完全一致的开发体验，这里提供专业的解决方案：</p>
+<p><strong>方案特点：</strong></p>
+<ul>
+<li>✅ 完全兼容HybridCLR环境</li>
+<li>✅ 与正向开发体验一致</li>
+<li>✅ 支持完整Unity API调用</li>
+<li>✅ 提供完整注入、环境部署编译支持；</li>
+<li>✅ 专业技术支持</li>
+</ul>
+<p><strong>注意事项：</strong></p>
+<ul>
+<li>由于方案的技术复杂性和开发成本</li>
+<li>该解决方案为<strong>付费部署服务</strong></li>
+<li>具体费用请联系咨询</li>
+</ul>
+<hr>
+<h2 id="📝-总结"><a href="#📝-总结" class="headerlink" title="📝 总结"></a>📝 总结</h2><p>Unity HybridCLR环境下的Dll注入技术为逆向工程师提供了强大的工具，从基础的反射调用到终极的签名依赖解决方案，每种方案都有其适用场景。选择合适的方案需要综合考虑项目复杂度、性能要求和开发成本。</p>
+<p><strong>方案对比：</strong></p>
+<table>
+<thead>
+<tr>
+<th>方案类型</th>
+<th>开发难度</th>
+<th>性能表现</th>
+<th>维护成本</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>基础HOOK</td>
+<td>低</td>
+<td>中</td>
+<td>低</td>
+<td>简单功能</td>
+</tr>
+<tr>
+<td>反射调用</td>
+<td>中</td>
+<td>低</td>
+<td>高</td>
+<td>中等复杂度项目</td>
+</tr>
+<tr>
+<td>终极方案</td>
+<td>高</td>
+<td>高</td>
+<td>低</td>
+<td>大型项目，追求完美体验</td>
+</tr>
+</tbody></table>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/IIIImmmyyy/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/" class="category-chain-item">技术分享</a>
+  
+  
+    <span>></span>
+    
+  <a href="/IIIImmmyyy/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/Unity%E9%80%86%E5%90%91/" class="category-chain-item">Unity逆向</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/IIIImmmyyy/tags/Unity/" class="print-no-link">#Unity</a>
+      
+        <a href="/IIIImmmyyy/tags/HybridCLR/" class="print-no-link">#HybridCLR</a>
+      
+        <a href="/IIIImmmyyy/tags/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/" class="print-no-link">#逆向工程</a>
+      
+        <a href="/IIIImmmyyy/tags/Dll%E6%B3%A8%E5%85%A5/" class="print-no-link">#Dll注入</a>
+      
+        <a href="/IIIImmmyyy/tags/IL2CPP/" class="print-no-link">#IL2CPP</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Unity HybridCLR环境下的高级Dll注入技术详解</div>
+      <div>https://iiiimmmyyy.github.io/IIIImmmyyy/2025/07/01/UnityHybridCLR下的Dll注入/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Imy</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年7月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/IIIImmmyyy/2025/06/27/%E4%B8%AA%E4%BA%BA%E9%9A%8F%E8%AE%B0-UREngine%E5%BC%80%E5%8F%91%E4%BB%8B%E7%BB%8D/" title="个人随记：UREngine开发介绍">
+                        <span class="hidden-mobile">个人随记：UREngine开发介绍</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+    <div id="giscus" class="giscus"></div>
+    <script type="text/javascript">
+      Fluid.utils.loadComments('#giscus', function() {
+        var options = {"repo":"IIIImmmyyy/IIIImmmyyy","repo-id":"R_kgDOPCnLXA","category":"Announcements","category-id":"DIC_kwDOPCnLXM4CsGT7","theme-light":"light","theme-dark":"dark","mapping":"pathname","reactions-enabled":1,"emit-metadata":0,"input-position":"bottom","lang":"zh-CN","theme":"preferred_color_scheme"};
+        var attributes = {};
+        for (let option in options) {
+          if (!option.startsWith('theme-')) {
+            var key = option.startsWith('data-') ? option : 'data-' + option;
+            attributes[key] = options[option];
+          }
+        }
+        var light = 'light';
+        var dark = 'dark';
+        window.GiscusThemeLight = light;
+        window.GiscusThemeDark = dark;
+        attributes['data-theme'] = document.documentElement.getAttribute('data-user-color-scheme') === 'dark' ? dark : light;
+        for (let attribute in attributes) {
+          var value = attributes[attribute];
+          if (value === undefined || value === null || value === '') {
+            delete attributes[attribute];
+          }
+        }
+        var s = document.createElement('script');
+        s.setAttribute('src', 'https://giscus.app/client.js');
+        s.setAttribute('crossorigin', 'anonymous');
+        for (let attribute in attributes) {
+          s.setAttribute(attribute, attributes[attribute]);
+        }
+        var ss = document.getElementsByTagName('script');
+        var e = ss.length > 0 ? ss[ss.length - 1] : document.head || document.documentElement;
+        e.parentNode.insertBefore(s, e.nextSibling);
+      });
+    </script>
+    <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/IIIImmmyyy/js/events.js" ></script>
+<script  src="/IIIImmmyyy/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/IIIImmmyyy/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/IIIImmmyyy/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/IIIImmmyyy/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

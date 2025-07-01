@@ -1,39 +1,46 @@
 ---
-title: Unity HybridCLR环境下的Dll注入技术详解
+title: Unity HybridCLR环境下的DLL注入技术深度解析
 date: 2025-07-01 14:30:00
 updated: 2025-07-01 14:30:00
 tags:
   - Unity
   - HybridCLR
   - 逆向工程
-  - Dll注入
+  - DLL注入
   - IL2CPP
 categories:
   - 技术分享
   - Unity逆向
-description: 深入探讨Unity HybridCLR环境下的Dll注入技术，从基础方案到终极解决方案的完整实践指南
-keywords: Unity, HybridCLR, Dll注入, IL2CPP, 逆向工程, 热更新
+description: 深入剖析Unity HybridCLR环境下的DLL注入技术，从基础实现到企业级解决方案的完整技术指南
+keywords: Unity, HybridCLR, DLL注入, IL2CPP, 逆向工程, 热更新
 ---
 
 ## 📖 引言
 
-### 什么是Unity HybridCLR？
+### Unity HybridCLR技术概述
 
-Unity HybridCLR是一个革命性的Unity热更新解决方案。它在高度兼容Unity原生IL2CPP的基础上，实现了一套高性能的解释器来执行C#代码，为Unity开发者提供了完整的C#热更新能力。
+Unity HybridCLR是Unity生态中的一项突破性热更新技术。它在保持与Unity原生IL2CPP高度兼容的前提下，内置了一套高性能的C#解释器，为Unity开发者提供了完整且强大的C#热更新解决方案。
+
+这项技术不仅改变了Unity应用的运行机制，也为逆向工程领域带来了全新的挑战和机遇。
 
 ---
 
-## 🔍 HybridCLR对逆向工程的影响
+## 🔍 HybridCLR对逆向工程的深层影响
 
-### 核心机制变化
+### 编译机制的根本性变革
 
-由于HybridCLR的引入，Unity应用的编译机制发生了重大变化：
+HybridCLR的引入使Unity应用的编译和执行机制发生了根本性改变：
 
-1. **预处理机制**：在编译dll的过程中，HybridCLR会对dll进行预处理，生成大量的占位函数
-2. **桥接函数**：这些占位函数是为了桥接到解释器而准备的
-3. **地址重用**：这解释了为什么在DumpCS时会看到大量同签名函数指向同一个地址的现象
+#### 1. 预处理与占位函数机制
+在DLL编译过程中，HybridCLR会对目标DLL进行深度预处理，生成大量的占位函数（Placeholder Functions）。这些函数的主要作用是：
+- 作为解释器的桥接点
+- 维护原有的函数签名结构
+- 确保IL2CPP编译器的正常工作
 
-**典型表现：**
+#### 2. 地址复用现象的技术原理
+这种机制解释了在使用DumpCS等工具时经常观察到的现象：多个同签名函数指向相同内存地址。
+
+**典型案例分析：**
 ```csharp
 // RVA: 0x105CEC4  invoke : 0x105CEC4  VA: 0x7D5BCA1EC4
 public bool IsActive(PanelCfg panelCfg) { return false; }
@@ -42,9 +49,8 @@ public bool IsActive(PanelCfg panelCfg) { return false; }
 public UIBase GetPanel(string componentName) { return null; }
 ```
 
-### 解释器执行机制
-
-所有占位函数最终都会进入解释器的Execute方法中执行：
+#### 3. 解释器执行核心机制
+所有占位函数最终都会重定向到HybridCLR解释器的核心执行方法：
 
 ```cpp
 namespace hybridclr {
@@ -57,23 +63,26 @@ namespace hybridclr {
 }
 ```
 
-### 逆向工程的挑战
+### 逆向工程面临的新挑战
 
-在HybridCLR环境下，传统的Hook方案面临新的挑战：
+HybridCLR环境下，传统逆向工程方法遇到了前所未有的挑战：
 
-- **解释器劫持**：需要Hook解释器而非具体函数
-- **复杂性增加**：调试和分析难度显著提升
-- **方案选择**：需要在多种技术方案中选择最适合的
+- **Hook目标转移**：需要Hook解释器核心而非具体业务函数
+- **分析复杂度激增**：调用链路变得更加复杂和抽象
+- **调试难度提升**：传统调试工具的效果大打折扣
+- **技术方案选择**：需要在多种全新的技术路径中进行抉择
 
 ---
 
-## 🛠️ 解决方案详解
+## 🛠️ 技术解决方案深度解析
 
-### 基础方案：利用HybridCLR热更新Dll注入
+### 基础方案：基于HybridCLR热更新的DLL注入
 
-#### 1. 创建热更新Dll
+#### 方案一：热更新DLL创建与部署
 
-首先创建一个HybridCLR项目，按照官方文档创建热更dll：
+**步骤1：创建热更新DLL项目**
+
+遵循HybridCLR官方文档，创建标准的热更新DLL项目：
 
 ```csharp
 public class GameApi
@@ -85,30 +94,31 @@ public class GameApi
 }
 ```
 
-#### 2. 部署热更新Dll
+**步骤2：DLL文件部署**
 
-编译完成后，将`HotUpdate.dll`推送到目标设备的沙盒目录：
+将编译生成的`HotUpdate.dll`部署到目标设备的沙盒目录：
 ```bash
-/data/data/xxx.xxx.xxx/HotUpdate.dll
+# 标准部署路径
+/data/data/[package_name]/HotUpdate.dll
 ```
 
-#### 3. C++注入实现
+**步骤3：C++层注入实现**
 
-编写C++代码完成对热更新dll的注入：
+通过C++代码实现DLL的动态加载和执行：
 
 ```cpp
-// 读取热更新dll文件
+// 文件读取和DLL加载
 Unity::Il2CppByteArray *pArray = ReadAllBytes(
-    Unity::Il2CppStringProxy::New("/data/data/com.ffcf.lt/files/HotUpdate.dll"));
+    Unity::Il2CppStringProxy::New("/data/data/com.example.app/files/HotUpdate.dll"));
 
 int arrayLength = Unity::ArrayProxy::Length(pArray);
 Unity::AppDomain *domain = Unity::AppDomain::CurrentDomain();
 
-// 加载热更新dll
+// 动态加载热更新DLL
 Unity::Assembly *loadedAssembly = LoadDll(domain, pArray);
 Il2CppString *assemblyName = loadedAssembly->GetSimpleName();
 
-// 获取类型和方法
+// 反射获取目标类型和方法
 Unity::SystemType *gameApiType = loadedAssembly->GetType(
     Unity::Il2CppStringProxy::New("GameApi"));
 
@@ -121,16 +131,16 @@ if (gameApiType) {
 }
 ```
 
-#### 4. 验证注入结果
+**步骤4：执行结果验证**
 
-运行游戏后，控制台输出：
+成功注入后，控制台将输出确认信息：
 ```
-2025-07-01 13:57:12.782  2136-2175  GameApi  com.ffcf.lt  I  GameApi 初始化完成
+2025-07-01 13:57:12.782  2136-2175  GameApi  com.example.app  I  GameApi 初始化完成
 ```
 
-#### 5. 跨域函数调用
+#### 方案二：跨域函数调用的反射实现
 
-成功注入热更新dll后，如何调用热更dll中或非热更dll中的函数？答案是使用反射机制：
+注入成功后，如何实现对游戏原生函数的调用？核心是使用反射机制：
 
 ```csharp
 private static void TestUIManagerAccess()
@@ -139,22 +149,22 @@ private static void TestUIManagerAccess()
 
     try
     {
-        // 获取类型信息
+        // 通过反射获取类型信息
         var uiManagerType = SmartReflection.FromType("UIManager", "Assembly-CSharp");
         var panelType = SmartReflection.FromType("UIPanelType", "Assembly-CSharp");
         
-        // 获取静态成员
+        // 获取静态实例和枚举值
         var instance = uiManagerType?.GetValue("Instance");
         var uiBagValue = panelType?.GetValue("UIBag");
       
-        // 空值检查
+        // 安全性检查
         if (instance == null || uiBagValue == null)
         {
             AndroidLogger.LogError("GameApi", "无法获取必要的对象或值");
             return;
         }
         
-        // 包装调用
+        // 包装实例并调用目标方法
         var uiManagerWrapper = SmartReflection.FromInstance(instance);
         uiManagerWrapper.Call("ShowPanel", uiBagValue, null, null, false, null);
         
@@ -167,28 +177,28 @@ private static void TestUIManagerAccess()
 }
 ```
 
-#### 基础方案的局限性
+#### 基础方案的技术局限性
 
-虽然反射方案能够实现目标功能，但存在明显的缺陷：
+尽管反射方案能够实现基本功能，但存在显著的技术瓶颈：
 
-- **性能开销**：反射调用的性能损耗较大，影响运行效率
-- **开发体验**：代码可读性差，维护困难，开发效率低下
-- **类型安全**：缺乏编译时类型检查，容易出现运行时错误
-- **调试困难**：反射调用的调试和错误定位相对复杂
+- **性能瓶颈**：反射调用带来巨大的性能开销，严重影响运行效率
+- **开发体验差**：代码可读性极差，维护成本高昂，开发效率低下
+- **类型安全缺失**：缺乏编译时类型检查，容易引发运行时异常
+- **调试复杂**：反射调用链的调试和错误定位异常困难
 
-基于这些局限性，我们在深入研究后，开发了一套革命性的商业化解决方案，旨在提供与正向开发完全一致的开发体验。
+基于这些核心问题，我们经过深入技术研究，开发了一套革命性的企业级解决方案。
 
 ---
 
-## 🚀 突破性解决方案
+## 🚀 突破性企业级解决方案
 
-### 技术创新突破
+### 核心技术突破
 
-经过深入的技术研究和大量的实践验证， 完全解决了传统反射方案的性能瓶颈和开发体验问题。
+经过大量的技术攻关和实践验证，我们完全解决了传统反射方案的核心痛点，实现了与正向开发完全一致的开发体验。
 
-### 终极开发体验
+### 开发体验的质的飞跃
 
-解决技术难题后，开发体验发生了质的飞跃：
+技术突破后，DLL注入开发体验发生了革命性变化：
 
 ```csharp
 public class GameApi
@@ -197,28 +207,28 @@ public class GameApi
     {
         AndroidLogger.LogInfo("GameApi", "GameApi 开始初始化");
 
-        // 等待游戏完全加载
+        // 等待游戏环境完全就绪
         await Task.Delay(30000);
         AndroidLogger.LogInfo("GameApi", "GameApi 初始化完成");
         
-        // 直接访问游戏对象，如同正向开发
+        // 直接访问游戏对象 - 如同原生开发一般自然
         var uiManager = UnitySingleton<UIManager>.Instance;
         AndroidLogger.LogInfo("GameApi", $"UIManager实例获取成功: {uiManager}");
         
-        // 调用游戏方法 - 完全的智能提示和类型安全
+        // 直接调用游戏方法 - 完整的智能提示和类型安全保障
         uiManager.ShowPanel(UIPanelType.UIBag);
     }
 }
 ```
 
-### 高级功能展示
+### 高级功能演示
 
-#### 动态脚本注入
+#### 动态脚本注入技术
 
 实现与正向开发完全一致的脚本开发体验：
 
 ```csharp
-// 查找游戏对象并添加自定义脚本
+// 定位游戏对象并注入自定义脚本
 var playerObject = GameObject.Find("Player_shadow");
 playerObject.AddComponent<CustomTestScript>();
 ```
@@ -228,32 +238,32 @@ public class CustomTestScript : MonoBehaviour
 {
     private void Start()
     {
-        AndroidLogger.LogDebug("CustomTestScript", "脚本启动成功");
+        AndroidLogger.LogDebug("CustomTestScript", "自定义脚本启动成功");
     }
     
     private void Update()
     {
-        AndroidLogger.LogDebug("CustomTestScript", "Update方法执行中");
+        AndroidLogger.LogDebug("CustomTestScript", "Update方法正在执行");
     }
 }
 ```
 
-**执行结果：**
+**执行效果验证：**
 ```
-2025-07-01 14:08:08.547  2371-2409  CustomTestScript  com.ffcf.lt  D  脚本启动成功
-2025-07-01 14:08:08.580  2371-2409  CustomTestScript  com.ffcf.lt  D  Update方法执行中
+2025-07-01 14:08:08.547  2371-2409  CustomTestScript  com.example.app  D  自定义脚本启动成功
+2025-07-01 14:08:08.580  2371-2409  CustomTestScript  com.example.app  D  Update方法正在执行
 ```
 
 #### 脚本热替换技术
 
-这个一个有趣的功能，可以替换原脚本逻辑，实现和Hook一致的效果：
+这是一项创新功能，可以运行时替换原生脚本逻辑，实现与Hook相似的效果：
 
 ```csharp
 public class GameApi
 {
     public static async void Init()
     {
-        AndroidLogger.LogInfo("GameApi", "开始执行脚本替换");
+        AndroidLogger.LogInfo("GameApi", "开始执行脚本热替换");
         
         await Task.Delay(30000);
         AndroidLogger.LogInfo("GameApi", "游戏环境准备完成");
@@ -261,125 +271,142 @@ public class GameApi
         var playerObject = GameObject.Find("Player_shadow");
         if (playerObject != null)
         {
-            // 移除原有脚本
+            // 移除原有脚本组件
             UnityEngine.Object.Destroy(playerObject.GetComponent<AIScript>());
-            AndroidLogger.LogInfo("GameApi", "原有AIScript已移除");
+            AndroidLogger.LogInfo("GameApi", "原有AIScript已成功移除");
             
-            // 添加增强版脚本（包含完整的原逻辑扩展）
+            // 注入增强版脚本（包含原有逻辑的完整扩展）
             playerObject.AddComponent<EnhancedAIScript>();
-            AndroidLogger.LogInfo("GameApi", "增强版AI脚本已注入");
+            AndroidLogger.LogInfo("GameApi", "增强版AI脚本注入完成");
         }
     }
 }
 ```
-#### 更多功能由你自己决定
-商业级的解决方案提供了各项Api访问的能力，完全可以实现各种各样的功能。这和原生开发是没有区别的。
+
+#### 无限可能的扩展功能
+企业级解决方案提供了对Unity全API的完整访问能力，开发体验与原生Unity开发无任何差异，可以实现任何您想要的功能。
 
 ---
 
-## 🔧 相关工具和资源
+## 🔧 相关工具与技术资源
 
-### Native Hook支持
+### Native Hook技术支持
 
-对于需要底层Hook功能的高级场景，推荐使用：
+针对需要底层Hook功能的高级应用场景，我们推荐使用：
 
-- **项目地址**：[HybridClrHookNative](https://github.com/IIIImmmyyy/HybridClrHookNative)
-- **核心功能**：提供Native层对CLR的完整Hook支持
-- **技术特点**：专门针对HybridCLR环境优化
-- **兼容性说明**：由于依赖inline hook特征，兼容性因游戏而异
+- **开源项目**：[HybridClrHookNative](https://github.com/IIIImmmyyy/HybridClrHookNative)
+- **核心能力**：提供Native层对CLR运行时的完整Hook支持
+- **技术优势**：专门针对HybridCLR环境进行深度优化
+- **兼容性说明**：由于依赖inline hook技术特征，兼容性因具体游戏而异
 
-### 替代技术方案
+### 创新技术方案
 
-除了传统Hook技术外，dll注入方案还支持多种创新实现方式：
+除了传统Hook技术，DLL注入方案还可以结合多种创新实现方式：
 
-1. **动态代理模式**：通过AOP代理实现函数拦截和增强
-2. **脚本替换策略**：运行时替换原生脚本，注入增强版本
-3. **逻辑重写方案**：完全重写核心游戏逻辑，实现定制化功能
-4. **热更内的Hook支持**:支持热更dll内的函数Hook，非热更dll还是需要native方案
+1. **动态代理模式**：通过AOP代理技术实现函数拦截和功能增强
+2. **脚本替换策略**：运行时动态替换原生脚本，注入功能增强版本
+3. **逻辑重写方案**：完全重构核心游戏逻辑，实现深度定制化功能
+4. **热更内Hook支持**：支持热更DLL内部函数的Hook，非热更DLL仍需Native方案
+
 ---
-
 
 ## 💼 商业化解决方案
-我们的商业化解决方案 能提供原生环境支持，让一切都变得更加简单，无需在native层编写C/C++代码，正向人员也可进行游戏的非官方插件开发、辅助功能开发。
-特别是基于引擎Api强大访问能力，几乎可实现你想要的任何功能。
 
+我们的企业级商业化解决方案提供了完整的原生环境支持，让一切变得简单高效。无需编写复杂的Native层C/C++代码，即使是正向开发人员也能轻松进行游戏的非官方插件开发和辅助功能开发。
+
+特别是基于对Unity引擎API的强大访问能力，几乎可以实现您想要的任何功能。
 
 ### 企业级完整解决方案
 
-如果您需要在HybridCLR环境下获得与正向开发完全一致的专业开发体验，我们提供企业级的完整解决方案：
+如果您需要在HybridCLR环境下获得与正向开发完全一致的专业开发体验，我们提供业界领先的企业级完整解决方案：
 
-#### 🎯 核心优势
+#### 🎯 核心技术优势
 
-- **🚀 零性能损耗**：完全摆脱反射调用，实现原生性能
-- **💡 智能开发体验**：完整的IDE智能提示和类型安全检查
-- **🔧 完整Unity API支持**：支持所有Unity原生API
-- **📈 完整的跨域访问**：支持游戏本身的热更dll和非热更dll的跨域访问
-- **🏗️ 全架构支持**：支持 x86、x86_64、armeabi-v7a、arm64-v8a 等主流架构
-- **⚡ 一键环境部署**：提供完整的开发环境和编译工具链
-- **🛡️ 专业技术支持**：提供长期的技术支持和方案升级
+- **🚀 零性能损耗**：完全摆脱反射调用的性能瓶颈，实现原生级性能表现
+- **💡 极致开发体验**：提供完整的IDE智能提示和编译时类型安全检查
+- **🔧 Unity API全覆盖**：支持所有Unity原生API和第三方库
+- **📈 完整跨域访问**：无缝支持游戏热更DLL和非热更DLL的跨域访问
+- **🏗️ 全架构兼容**：支持x86、x86_64、armeabi-v7a、arm64-v8a等所有主流架构
+- **⚡ 一键环境部署**：提供完整的开发环境和自动化编译工具链
+- **🛡️ 专业技术保障**：提供长期技术支持和持续方案升级服务
 
+#### 📋 技术对比规格
 
-#### 📋 技术规格
+| 核心特性 | 传统反射方案 | 我们的企业级解决方案 |
+|---------|-------------|-------------------|
+| 开发体验 | 反人类的反射调用语法 | 与正向开发完全一致 |
+| 性能表现 | 巨大的反射调用开销 | 零性能损耗 |
+| 类型安全 | 仅运行时错误检查 | 完整的编译时类型检查 |
+| IDE支持 | 完全无智能提示 | 完整智能提示和自动补全 |
+| 架构支持 | 需要逐个手动适配 | 全架构一体化自动支持 |
+| 维护成本 | 极高的维护成本 | 极低的维护成本 |
 
-| 特性项目 | 基础反射方案 | 我们的解决方案 |
-|---------|-------------|---------------|
-| 开发体验 | 反人类的反射调用 | 与正向开发完全一致 |
-| 性能表现 | 反射开销巨大 | 零性能损耗 |
-| 类型安全 | 运行时错误 | 编译时类型检查 |
-| IDE支持 | 无智能提示 | 完整智能提示 |
-| 架构支持 | 需要逐个适配 | 全架构一体化支持 |
-| 维护成本 | 极高 | 极低 |
+#### 💰 服务模式说明
 
-#### 💰 服务说明
+- **定制化部署**：根据具体项目需求提供量身定制的技术解决方案
+- **完整工具链**：包含从开发、编译到部署的完整自动化工具链
+- **长期技术支持**：提供持续的技术支持和定期的方案升级服务
 
-- **定制化部署**：根据项目需求提供定制化的技术方案
-- **完整工具链**：包含开发、编译、部署的完整工具链
-- **持续支持**：提供长期的技术支持和方案升级
+**重要说明：**
+- 鉴于技术方案的高度复杂性和巨大的研发投入
+- 该解决方案采用**付费定制部署**的专业商业模式
+- 具体技术实施方案和详细报价请联系我们获取
 
-**注意事项：**
-- 由于技术方案的高度复杂性和巨大的研发投入
-- 该解决方案采用**付费定制部署**的商业模式
-- 具体技术方案和报价请联系我
+---
+
+## 📊 技术方案全面对比分析
+
+### 多维度方案对比
+
+| 技术方案 | 技术复杂度 | 开发效率 | 运行性能 | 维护成本 | 最佳适用场景 |
+|---------|-----------|----------|----------|----------|------------|
+| 基础Hook方案 | ⭐⭐ | ⭐⭐ | ⭐⭐⭐ | ⭐⭐ | 简单功能修改和学习 |
+| 反射调用方案 | ⭐⭐⭐ | ⭐ | ⭐ | ⭐ | 中等复杂度的原型项目 |
+| 企业级解决方案 | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | 大型项目和商业级应用 |
+
+### 技术选型建议
+
+- **技术学习阶段**：建议从基础Hook方案入手，深入理解核心技术原理
+- **中小型项目**：可以考虑反射方案，但需要充分评估性能和维护成本
+- **企业级应用**：强烈推荐采用我们的企业级解决方案，获得最佳的技术保障和开发体验
 
 ---
 
-## 📊 技术对比分析
+## 📝 技术总结
 
-### 方案综合对比
+Unity HybridCLR环境下的DLL注入技术为逆向工程和游戏二次开发提供了强大的技术基础。从基础的反射实现方案到我们的企业级解决方案，每种技术路径都有其独特的价值和适用场景。
 
-| 技术方案 | 技术复杂度 | 开发效率 | 运行性能 | 维护成本 | 适用场景 |
-|---------|-----------|----------|----------|----------|----------|
-| 基础Hook | ⭐⭐ | ⭐⭐ | ⭐⭐⭐ | ⭐⭐ | 简单功能修改 |
-| 反射调用 | ⭐⭐⭐ | ⭐ | ⭐ | ⭐ | 中等复杂度项目 |
-| 企业级方案 | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | 大型项目和商业应用 |
+选择最适合的技术方案需要综合考虑项目规模、性能要求、开发成本和长期维护等多个关键因素。
 
-### 选择建议
+## 💬 常见问题解答
 
-- **入门学习**：建议从基础Hook方案开始，了解核心原理
-- **中小项目**：可以使用反射方案，但要做好性能和维护的权衡
-- **企业应用**：强烈推荐使用我们的企业级解决方案，获得最佳的开发体验和技术保障
+#### Q: 是否支持原生IL2CPP环境下的开发支持（即非HybridCLR环境）？
+**A:** 由于技术精力分配的考虑，目前暂不支持。另外，此类需求与UREngine反编译引擎有功能重叠，未来开发的可能性相对较低。
+
+#### Q: HybridCLR环境支持是否等同于游戏Mod开发？
+**A:** 是的，两者本质上是相同的概念，都属于非官方的游戏插件和Mod开发范畴。
+
+#### Q: 定制部署是否针对每个游戏项目单独收费？
+**A:** 是的，采用按项目收费模式。如果有大量业务需求，可以协商降低单项费用，或考虑年度授权的合作方案。
+
+#### Q: 是否提供完整的注入环境支持？
+**A:** 可以提供包括模拟器、真机、全架构、Android全系统版本的注入插件DLL支持。
+
+#### Q: 是否支持iOS平台？
+**A:** 目前暂不支持iOS平台。
+
+#### Q: 如果调用的函数在原游戏中不存在，但Unity引擎API中存在，可以自动补全吗？
+**A:** Unity引擎相关类和System类均无法自动补全，这是由于在编译期间就已经被Unity的AOT裁剪机制处理完毕。这个问题即使在HybridCLR的原生环境中也同样存在，属于Unity AOT裁剪机制的固有限制。
 
 ---
-## 📝 总结
 
-Unity HybridCLR环境下的Dll注入技术为逆向工程提供了强大的能力。从基础的反射方案到我们的企业级解决方案，每种技术都有其适用的场景。选择合适的方案需要综合考虑项目需求、性能要求和开发成本。
+## 📞 联系我们
 
-## 问答
-### 问：是否支持原生IL2CPP下原生环境的开发支持(即非HybridCLR)
-### 答：由于精力问题暂不支持，另外此类需求与UREngine反编译引擎有重叠部分，后续开发的可能性较低。
-### 问：HybridCLR的环境支持是否就是开发Mod？
-### 答：是的，两个是同一个概念。都是非官方的插件、mod。
-### 问：定制部署是否是每一个游戏都单独收费？
-### 答：是的，如果有大量业务需求可降低收费，或考虑年授权方案。
-### 问：是否提供注入环境支持？
-### 答：可提供模拟器、真机、全架构、安卓全系统 注入插件dll。
-### 问：是否支持IOS？
-### 答：暂不支持
+如果您对我们的技术方案感兴趣，或有任何技术问题需要咨询，欢迎随时联系我们进行深入讨论！
 
-
-如果您对我们的技术方案感兴趣，或有任何技术问题，欢迎随时联系讨论！
-联系方式：QQ 295238641
-邮箱 ： 295238641@qq.com 
+**联系方式：**
+- **QQ：** 295238641
+- **邮箱：** 295238641@qq.com
 
 
 

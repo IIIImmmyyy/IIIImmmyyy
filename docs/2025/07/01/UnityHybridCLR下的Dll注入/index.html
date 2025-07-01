@@ -31,9 +31,9 @@
 <meta property="article:author" content="Imy">
 <meta property="article:tag" content="Unity">
 <meta property="article:tag" content="逆向工程">
-<meta property="article:tag" content="IL2CPP">
 <meta property="article:tag" content="HybridCLR">
 <meta property="article:tag" content="Dll注入">
+<meta property="article:tag" content="IL2CPP">
 <meta name="twitter:card" content="summary_large_image">
   
   
@@ -227,7 +227,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.3k 字
+          2.6k 字
         
       </span>
     
@@ -238,7 +238,7 @@
         
         
         
-          20 分钟
+          22 分钟
         
       </span>
     
@@ -353,9 +353,11 @@
 <li><strong>动态代理模式</strong>：通过AOP代理实现函数拦截和增强</li>
 <li><strong>脚本替换策略</strong>：运行时替换原生脚本，注入增强版本</li>
 <li><strong>逻辑重写方案</strong>：完全重写核心游戏逻辑，实现定制化功能</li>
+<li><strong>热更内的Hook支持</strong>:支持热更dll内的函数Hook，非热更dll还是需要native方案</li>
 </ol>
 <hr>
-<h2 id="💼-商业化解决方案"><a href="#💼-商业化解决方案" class="headerlink" title="💼 商业化解决方案"></a>💼 商业化解决方案</h2><h3 id="企业级完整解决方案"><a href="#企业级完整解决方案" class="headerlink" title="企业级完整解决方案"></a>企业级完整解决方案</h3><p>如果您需要在HybridCLR环境下获得与正向开发完全一致的专业开发体验，我们提供企业级的完整解决方案：</p>
+<h2 id="💼-商业化解决方案"><a href="#💼-商业化解决方案" class="headerlink" title="💼 商业化解决方案"></a>💼 商业化解决方案</h2><p>我们的商业化解决方案 能提供原生环境支持，让一切都变得更加简单，无需在native层编写C&#x2F;C++代码，正向人员也可进行游戏的非官方插件开发、辅助功能开发。<br>特别是基于引擎Api强大访问能力，几乎可实现你想要的任何功能。</p>
+<h3 id="企业级完整解决方案"><a href="#企业级完整解决方案" class="headerlink" title="企业级完整解决方案"></a>企业级完整解决方案</h3><p>如果您需要在HybridCLR环境下获得与正向开发完全一致的专业开发体验，我们提供企业级的完整解决方案：</p>
 <h4 id="🎯-核心优势"><a href="#🎯-核心优势" class="headerlink" title="🎯 核心优势"></a>🎯 核心优势</h4><ul>
 <li><strong>🚀 零性能损耗</strong>：完全摆脱反射调用，实现原生性能</li>
 <li><strong>💡 智能开发体验</strong>：完整的IDE智能提示和类型安全检查</li>
@@ -459,7 +461,7 @@
 </ul>
 <hr>
 <h2 id="📝-总结"><a href="#📝-总结" class="headerlink" title="📝 总结"></a>📝 总结</h2><p>Unity HybridCLR环境下的Dll注入技术为逆向工程提供了强大的能力。从基础的反射方案到我们的企业级解决方案，每种技术都有其适用的场景。选择合适的方案需要综合考虑项目需求、性能要求和开发成本。</p>
-<p>如果您对我们的技术方案感兴趣，或有任何技术问题，欢迎随时联系讨论！<br>联系方式：QQ 295238641<br>邮箱 ： <a href="mailto:&#x32;&#x39;&#53;&#x32;&#51;&#x38;&#54;&#52;&#x31;&#64;&#113;&#x71;&#46;&#x63;&#x6f;&#109;">295238641@qq.com</a> </p>
+<h2 id="问答"><a href="#问答" class="headerlink" title="问答"></a>问答</h2><h3 id="问：是否支持原生IL2CPP下原生环境的开发支持-即非HybridCLR"><a href="#问：是否支持原生IL2CPP下原生环境的开发支持-即非HybridCLR" class="headerlink" title="问：是否支持原生IL2CPP下原生环境的开发支持(即非HybridCLR)"></a>问：是否支持原生IL2CPP下原生环境的开发支持(即非HybridCLR)</h3><h3 id="答：由于精力问题暂不支持，另外此类需求与UREngine反编译引擎有重叠部分，后续开发的可能性较低。"><a href="#答：由于精力问题暂不支持，另外此类需求与UREngine反编译引擎有重叠部分，后续开发的可能性较低。" class="headerlink" title="答：由于精力问题暂不支持，另外此类需求与UREngine反编译引擎有重叠部分，后续开发的可能性较低。"></a>答：由于精力问题暂不支持，另外此类需求与UREngine反编译引擎有重叠部分，后续开发的可能性较低。</h3><h3 id="问：HybridCLR的环境支持是否就是开发Mod？"><a href="#问：HybridCLR的环境支持是否就是开发Mod？" class="headerlink" title="问：HybridCLR的环境支持是否就是开发Mod？"></a>问：HybridCLR的环境支持是否就是开发Mod？</h3><h3 id="答：是的，两个是同一个概念。都是非官方的插件、mod。"><a href="#答：是的，两个是同一个概念。都是非官方的插件、mod。" class="headerlink" title="答：是的，两个是同一个概念。都是非官方的插件、mod。"></a>答：是的，两个是同一个概念。都是非官方的插件、mod。</h3><h3 id="问：定制部署是否是每一个游戏都单独收费？"><a href="#问：定制部署是否是每一个游戏都单独收费？" class="headerlink" title="问：定制部署是否是每一个游戏都单独收费？"></a>问：定制部署是否是每一个游戏都单独收费？</h3><h3 id="答：是的，如果有大量业务需求可降低收费，或考虑年授权方案。"><a href="#答：是的，如果有大量业务需求可降低收费，或考虑年授权方案。" class="headerlink" title="答：是的，如果有大量业务需求可降低收费，或考虑年授权方案。"></a>答：是的，如果有大量业务需求可降低收费，或考虑年授权方案。</h3><h3 id="问：是否提供注入环境支持？"><a href="#问：是否提供注入环境支持？" class="headerlink" title="问：是否提供注入环境支持？"></a>问：是否提供注入环境支持？</h3><h3 id="答：可提供模拟器、真机、全架构、安卓全系统-注入插件dll。"><a href="#答：可提供模拟器、真机、全架构、安卓全系统-注入插件dll。" class="headerlink" title="答：可提供模拟器、真机、全架构、安卓全系统 注入插件dll。"></a>答：可提供模拟器、真机、全架构、安卓全系统 注入插件dll。</h3><h3 id="问：是否支持IOS？"><a href="#问：是否支持IOS？" class="headerlink" title="问：是否支持IOS？"></a>问：是否支持IOS？</h3><h3 id="答：暂不支持"><a href="#答：暂不支持" class="headerlink" title="答：暂不支持"></a>答：暂不支持</h3><p>如果您对我们的技术方案感兴趣，或有任何技术问题，欢迎随时联系讨论！<br>联系方式：QQ 295238641<br>邮箱 ： <a href="mailto:&#50;&#x39;&#x35;&#x32;&#x33;&#x38;&#54;&#52;&#49;&#64;&#x71;&#x71;&#x2e;&#99;&#111;&#x6d;">295238641@qq.com</a> </p>
 
                 
               </div>
@@ -504,11 +506,11 @@
       
         <a href="/IIIImmmyyy/tags/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/" class="print-no-link">#逆向工程</a>
       
-        <a href="/IIIImmmyyy/tags/IL2CPP/" class="print-no-link">#IL2CPP</a>
-      
         <a href="/IIIImmmyyy/tags/HybridCLR/" class="print-no-link">#HybridCLR</a>
       
         <a href="/IIIImmmyyy/tags/Dll%E6%B3%A8%E5%85%A5/" class="print-no-link">#Dll注入</a>
+      
+        <a href="/IIIImmmyyy/tags/IL2CPP/" class="print-no-link">#IL2CPP</a>
       
     </div>
   

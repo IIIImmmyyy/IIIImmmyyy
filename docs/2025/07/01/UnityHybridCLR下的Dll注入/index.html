@@ -30,10 +30,10 @@
 <meta property="article:modified_time" content="2025-07-01T06:30:00.000Z">
 <meta property="article:author" content="Imy">
 <meta property="article:tag" content="Unity">
-<meta property="article:tag" content="HybridCLR">
 <meta property="article:tag" content="逆向工程">
-<meta property="article:tag" content="DLL注入">
 <meta property="article:tag" content="IL2CPP">
+<meta property="article:tag" content="HybridCLR">
+<meta property="article:tag" content="DLL注入">
 <meta name="twitter:card" content="summary_large_image">
   
   
@@ -305,7 +305,7 @@
 <li><strong>技术方案选择</strong>：需要在多种全新的技术路径中进行抉择</li>
 </ul>
 <hr>
-<h2 id="🛠️-技术解决方案深度解析"><a href="#🛠️-技术解决方案深度解析" class="headerlink" title="🛠️ 技术解决方案深度解析"></a>🛠️ 技术解决方案深度解析</h2><h3 id="基础方案：基于HybridCLR热更新的DLL注入"><a href="#基础方案：基于HybridCLR热更新的DLL注入" class="headerlink" title="基础方案：基于HybridCLR热更新的DLL注入"></a>基础方案：基于HybridCLR热更新的DLL注入</h3><h4 id="方案一：热更新DLL创建与部署"><a href="#方案一：热更新DLL创建与部署" class="headerlink" title="方案一：热更新DLL创建与部署"></a>方案一：热更新DLL创建与部署</h4><p><strong>步骤1：创建热更新DLL项目</strong></p>
+<h2 id="🛠️-技术解决方案深度解析"><a href="#🛠️-技术解决方案深度解析" class="headerlink" title="🛠️ 技术解决方案深度解析"></a>🛠️ 技术解决方案深度解析</h2><h3 id="基础方案：基于HybridCLR热更新的DLL注入"><a href="#基础方案：基于HybridCLR热更新的DLL注入" class="headerlink" title="基础方案：基于HybridCLR热更新的DLL注入"></a>基础方案：基于HybridCLR热更新的DLL注入</h3><h4 id="方案：热更新DLL创建与部署"><a href="#方案：热更新DLL创建与部署" class="headerlink" title="方案：热更新DLL创建与部署"></a>方案：热更新DLL创建与部署</h4><p><strong>步骤1：创建热更新DLL项目</strong></p>
 <p>遵循HybridCLR官方文档，创建标准的热更新DLL项目：</p>
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">GameApi</span><br>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Init</span>()</span><br>    &#123;<br>        AndroidLogger.LogInfo(<span class="hljs-string">&quot;GameApi&quot;</span>, <span class="hljs-string">&quot;GameApi 初始化完成&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
@@ -321,7 +321,7 @@
 <p>成功注入后，控制台将输出确认信息：</p>
 <figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">2025</span>-<span class="hljs-number">07</span>-<span class="hljs-number">01</span> <span class="hljs-number">13</span>:<span class="hljs-number">57</span>:<span class="hljs-number">12</span>.<span class="hljs-number">782</span>  <span class="hljs-number">2136</span>-<span class="hljs-number">2175</span>  GameApi  com.example.app  I  GameApi 初始化完成<br></code></pre></td></tr></table></figure>
 
-<h4 id="方案二：跨域函数调用的反射实现"><a href="#方案二：跨域函数调用的反射实现" class="headerlink" title="方案二：跨域函数调用的反射实现"></a>方案二：跨域函数调用的反射实现</h4><p>注入成功后，如何实现对游戏原生函数的调用？核心是使用反射机制：</p>
+<h4 id="跨域函数调用的反射实现"><a href="#跨域函数调用的反射实现" class="headerlink" title="跨域函数调用的反射实现"></a>跨域函数调用的反射实现</h4><p>注入成功后，如何实现对游戏原生函数的调用？核心是使用反射机制：</p>
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">TestUIManagerAccess</span>()</span><br>&#123;<br>    AndroidLogger.LogInfo(<span class="hljs-string">&quot;GameApi&quot;</span>, <span class="hljs-string">&quot;--- 开始测试UIManager访问 ---&quot;</span>);<br><br>    <span class="hljs-keyword">try</span><br>    &#123;<br>        <span class="hljs-comment">// 通过反射获取类型信息</span><br>        <span class="hljs-keyword">var</span> uiManagerType = SmartReflection.FromType(<span class="hljs-string">&quot;UIManager&quot;</span>, <span class="hljs-string">&quot;Assembly-CSharp&quot;</span>);<br>        <span class="hljs-keyword">var</span> panelType = SmartReflection.FromType(<span class="hljs-string">&quot;UIPanelType&quot;</span>, <span class="hljs-string">&quot;Assembly-CSharp&quot;</span>);<br>        <br>        <span class="hljs-comment">// 获取静态实例和枚举值</span><br>        <span class="hljs-keyword">var</span> instance = uiManagerType?.GetValue(<span class="hljs-string">&quot;Instance&quot;</span>);<br>        <span class="hljs-keyword">var</span> uiBagValue = panelType?.GetValue(<span class="hljs-string">&quot;UIBag&quot;</span>);<br>      <br>        <span class="hljs-comment">// 安全性检查</span><br>        <span class="hljs-keyword">if</span> (instance == <span class="hljs-literal">null</span> || uiBagValue == <span class="hljs-literal">null</span>)<br>        &#123;<br>            AndroidLogger.LogError(<span class="hljs-string">&quot;GameApi&quot;</span>, <span class="hljs-string">&quot;无法获取必要的对象或值&quot;</span>);<br>            <span class="hljs-keyword">return</span>;<br>        &#125;<br>        <br>        <span class="hljs-comment">// 包装实例并调用目标方法</span><br>        <span class="hljs-keyword">var</span> uiManagerWrapper = SmartReflection.FromInstance(instance);<br>        uiManagerWrapper.Call(<span class="hljs-string">&quot;ShowPanel&quot;</span>, uiBagValue, <span class="hljs-literal">null</span>, <span class="hljs-literal">null</span>, <span class="hljs-literal">false</span>, <span class="hljs-literal">null</span>);<br>        <br>        AndroidLogger.LogInfo(<span class="hljs-string">&quot;GameApi&quot;</span>, <span class="hljs-string">&quot;UIManager调用成功&quot;</span>);<br>    &#125;<br>    <span class="hljs-keyword">catch</span> (Exception ex)<br>    &#123;<br>        AndroidLogger.LogError(<span class="hljs-string">&quot;GameApi&quot;</span>, <span class="hljs-string">$&quot;UIManager访问测试失败: <span class="hljs-subst">&#123;ex.Message&#125;</span>&quot;</span>, ex);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <h4 id="基础方案的技术局限性"><a href="#基础方案的技术局限性" class="headerlink" title="基础方案的技术局限性"></a>基础方案的技术局限性</h4><p>尽管反射方案能够实现基本功能，但存在显著的技术瓶颈：</p>
@@ -484,7 +484,7 @@
 <p><strong>联系方式：</strong></p>
 <ul>
 <li><strong>QQ：</strong> 295238641</li>
-<li><strong>邮箱：</strong> <a href="mailto:&#x32;&#57;&#x35;&#50;&#x33;&#56;&#54;&#52;&#x31;&#64;&#x71;&#113;&#46;&#x63;&#111;&#x6d;">295238641@qq.com</a></li>
+<li><strong>邮箱：</strong> <a href="mailto:&#50;&#x39;&#x35;&#x32;&#x33;&#56;&#x36;&#x34;&#x31;&#x40;&#x71;&#113;&#x2e;&#x63;&#x6f;&#x6d;">295238641@qq.com</a></li>
 </ul>
 
                 
@@ -528,13 +528,13 @@
       
         <a href="/IIIImmmyyy/tags/Unity/" class="print-no-link">#Unity</a>
       
-        <a href="/IIIImmmyyy/tags/HybridCLR/" class="print-no-link">#HybridCLR</a>
-      
         <a href="/IIIImmmyyy/tags/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/" class="print-no-link">#逆向工程</a>
       
-        <a href="/IIIImmmyyy/tags/DLL%E6%B3%A8%E5%85%A5/" class="print-no-link">#DLL注入</a>
-      
         <a href="/IIIImmmyyy/tags/IL2CPP/" class="print-no-link">#IL2CPP</a>
+      
+        <a href="/IIIImmmyyy/tags/HybridCLR/" class="print-no-link">#HybridCLR</a>
+      
+        <a href="/IIIImmmyyy/tags/DLL%E6%B3%A8%E5%85%A5/" class="print-no-link">#DLL注入</a>
       
     </div>
   

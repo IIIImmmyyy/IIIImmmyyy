@@ -256,7 +256,7 @@ public class CustomTestScript : MonoBehaviour
 
 #### 脚本热替换技术
 
-这是一项创新功能，可以运行时替换原生脚本逻辑，实现与Hook相似的效果：
+这是个有趣的示例，可以运行时替换原生脚本逻辑，实现与Hook相似的效果：
 
 ```csharp
 public class GameApi
@@ -398,6 +398,8 @@ Unity HybridCLR环境下的DLL注入技术为逆向工程和游戏二次开发�
 #### Q: 如果调用的函数在原游戏中不存在，但Unity引擎API中存在，可以自动补全吗？
 **A:** Unity引擎相关类和System类均无法自动补全，这是由于在编译期间就已经被Unity的AOT裁剪机制处理完毕。这个问题即使在HybridCLR的原生环境中也同样存在，属于Unity AOT裁剪机制的固有限制。
 
+#### Q：这个框架会对原始DLL产生入侵吗？
+**A:** 不会，注入的dll类似一个插件，对原始dll零入侵。是否入侵完全取决于你的开发方式。所以原始dll更新也不会对你的插件产生任何影响。
 ---
 
 ## 📞 联系我们

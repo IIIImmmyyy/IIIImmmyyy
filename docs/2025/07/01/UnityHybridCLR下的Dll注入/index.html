@@ -227,7 +227,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.2k 字
+          3.3k 字
         
       </span>
     
@@ -238,7 +238,7 @@
         
         
         
-          27 分钟
+          28 分钟
         
       </span>
     
@@ -345,7 +345,7 @@
 <p><strong>执行效果验证：</strong></p>
 <figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">2025</span>-<span class="hljs-number">07</span>-<span class="hljs-number">01</span> <span class="hljs-number">14</span>:<span class="hljs-number">08</span>:<span class="hljs-number">08</span>.<span class="hljs-number">547</span>  <span class="hljs-number">2371</span>-<span class="hljs-number">2409</span>  CustomTestScript  com.example.app  D  自定义脚本启动成功<br><span class="hljs-attribute">2025</span>-<span class="hljs-number">07</span>-<span class="hljs-number">01</span> <span class="hljs-number">14</span>:<span class="hljs-number">08</span>:<span class="hljs-number">08</span>.<span class="hljs-number">580</span>  <span class="hljs-number">2371</span>-<span class="hljs-number">2409</span>  CustomTestScript  com.example.app  D  Update方法正在执行<br></code></pre></td></tr></table></figure>
 
-<h4 id="脚本热替换技术"><a href="#脚本热替换技术" class="headerlink" title="脚本热替换技术"></a>脚本热替换技术</h4><p>这是一项创新功能，可以运行时替换原生脚本逻辑，实现与Hook相似的效果：</p>
+<h4 id="脚本热替换技术"><a href="#脚本热替换技术" class="headerlink" title="脚本热替换技术"></a>脚本热替换技术</h4><p>这是个有趣的示例，可以运行时替换原生脚本逻辑，实现与Hook相似的效果：</p>
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">GameApi</span><br>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Init</span>()</span><br>    &#123;<br>        AndroidLogger.LogInfo(<span class="hljs-string">&quot;GameApi&quot;</span>, <span class="hljs-string">&quot;开始执行脚本热替换&quot;</span>);<br>        <br>        <span class="hljs-keyword">await</span> Task.Delay(<span class="hljs-number">30000</span>);<br>        AndroidLogger.LogInfo(<span class="hljs-string">&quot;GameApi&quot;</span>, <span class="hljs-string">&quot;游戏环境准备完成&quot;</span>);<br>        <br>        <span class="hljs-keyword">var</span> playerObject = GameObject.Find(<span class="hljs-string">&quot;Player_shadow&quot;</span>);<br>        <span class="hljs-keyword">if</span> (playerObject != <span class="hljs-literal">null</span>)<br>        &#123;<br>            <span class="hljs-comment">// 移除原有脚本组件</span><br>            UnityEngine.Object.Destroy(playerObject.GetComponent&lt;AIScript&gt;());<br>            AndroidLogger.LogInfo(<span class="hljs-string">&quot;GameApi&quot;</span>, <span class="hljs-string">&quot;原有AIScript已成功移除&quot;</span>);<br>            <br>            <span class="hljs-comment">// 注入增强版脚本（包含原有逻辑的完整扩展）</span><br>            playerObject.AddComponent&lt;EnhancedAIScript&gt;();<br>            AndroidLogger.LogInfo(<span class="hljs-string">&quot;GameApi&quot;</span>, <span class="hljs-string">&quot;增强版AI脚本注入完成&quot;</span>);<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <h4 id="无限可能的扩展功能"><a href="#无限可能的扩展功能" class="headerlink" title="无限可能的扩展功能"></a>无限可能的扩展功能</h4><p>企业级解决方案提供了对Unity全API的完整访问能力，开发体验与原生Unity开发无任何差异，可以实现任何您想要的功能。</p>
@@ -478,12 +478,11 @@
 <h4 id="Q-是否提供完整的注入环境支持？"><a href="#Q-是否提供完整的注入环境支持？" class="headerlink" title="Q: 是否提供完整的注入环境支持？"></a>Q: 是否提供完整的注入环境支持？</h4><p><strong>A:</strong> 可以提供包括模拟器、真机、全架构、Android全系统版本的注入插件DLL支持。</p>
 <h4 id="Q-是否支持iOS平台？"><a href="#Q-是否支持iOS平台？" class="headerlink" title="Q: 是否支持iOS平台？"></a>Q: 是否支持iOS平台？</h4><p><strong>A:</strong> 目前暂不支持iOS平台。</p>
 <h4 id="Q-如果调用的函数在原游戏中不存在，但Unity引擎API中存在，可以自动补全吗？"><a href="#Q-如果调用的函数在原游戏中不存在，但Unity引擎API中存在，可以自动补全吗？" class="headerlink" title="Q: 如果调用的函数在原游戏中不存在，但Unity引擎API中存在，可以自动补全吗？"></a>Q: 如果调用的函数在原游戏中不存在，但Unity引擎API中存在，可以自动补全吗？</h4><p><strong>A:</strong> Unity引擎相关类和System类均无法自动补全，这是由于在编译期间就已经被Unity的AOT裁剪机制处理完毕。这个问题即使在HybridCLR的原生环境中也同样存在，属于Unity AOT裁剪机制的固有限制。</p>
-<hr>
-<h2 id="📞-联系我们"><a href="#📞-联系我们" class="headerlink" title="📞 联系我们"></a>📞 联系我们</h2><p>如果您对我们的技术方案感兴趣，或有任何技术问题需要咨询，欢迎随时联系我们进行深入讨论！</p>
+<h4 id="Q：这个框架会对原始DLL产生入侵吗？"><a href="#Q：这个框架会对原始DLL产生入侵吗？" class="headerlink" title="Q：这个框架会对原始DLL产生入侵吗？"></a>Q：这个框架会对原始DLL产生入侵吗？</h4><h2 id="A-不会，注入的dll类似一个插件，对原始dll零入侵。是否入侵完全取决于你的开发方式。所以原始dll更新也不会对你的插件产生任何影响。"><a href="#A-不会，注入的dll类似一个插件，对原始dll零入侵。是否入侵完全取决于你的开发方式。所以原始dll更新也不会对你的插件产生任何影响。" class="headerlink" title="A: 不会，注入的dll类似一个插件，对原始dll零入侵。是否入侵完全取决于你的开发方式。所以原始dll更新也不会对你的插件产生任何影响。"></a><strong>A:</strong> 不会，注入的dll类似一个插件，对原始dll零入侵。是否入侵完全取决于你的开发方式。所以原始dll更新也不会对你的插件产生任何影响。</h2><h2 id="📞-联系我们"><a href="#📞-联系我们" class="headerlink" title="📞 联系我们"></a>📞 联系我们</h2><p>如果您对我们的技术方案感兴趣，或有任何技术问题需要咨询，欢迎随时联系我们进行深入讨论！</p>
 <p><strong>联系方式：</strong></p>
 <ul>
 <li><strong>QQ：</strong> 295238641</li>
-<li><strong>邮箱：</strong> <a href="mailto:&#x32;&#x39;&#x35;&#50;&#51;&#x38;&#54;&#52;&#x31;&#64;&#113;&#x71;&#x2e;&#x63;&#x6f;&#109;">295238641@qq.com</a></li>
+<li><strong>邮箱：</strong> <a href="mailto:&#50;&#57;&#x35;&#50;&#x33;&#x38;&#54;&#52;&#49;&#64;&#x71;&#x71;&#46;&#x63;&#111;&#109;">295238641@qq.com</a></li>
 </ul>
 
                 

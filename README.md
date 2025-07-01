@@ -79,7 +79,7 @@
 ### 🔥 最新博客文章
 - 🚀 [**UREngine开发介绍**](https://iiiimmmyyy.github.io/IIIImmmyyy/) - 个人随记与开发心得
 - 🛠️ [**UnityReverseEngine技术详解**](https://iiiimmmyyy.github.io/IIIImmmyyy/) - 突破性Unity反编译引擎
-- 🎯 [**IL2CPP逆向工程实战**](https://iiiimmmyyy.github.io/IIIImmmyyy/) - ARM64架构下的反编译技术
+- 🎯 [**HybridCLR的Dll注入方案**](https://iiiimmmyyy.github.io/IIIImmmyyy/) - Unity HybridCLR环境下的Dll注入技术详解
 
 ### 📚 教程
 - 🎓 [Unity手游安全中级教程](https://github.com/IIIImmmyyy/U3DGameCourse) - 系统性游戏安全学习资料

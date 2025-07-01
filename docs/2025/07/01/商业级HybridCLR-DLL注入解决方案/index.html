@@ -302,7 +302,6 @@
 <h4 id="2-开发体验噩梦"><a href="#2-开发体验噩梦" class="headerlink" title="2. 开发体验噩梦"></a>2. 开发体验噩梦</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">// 没有智能提示，容易出错</span><br>uiManagerWrapper.Call(<span class="hljs-string">&quot;ShowPanel&quot;</span>, wrongParam); <span class="hljs-comment">// 编译通过，运行崩溃</span><br><br><span class="hljs-comment">// 参数类型不明确</span><br>wrapper.Call(<span class="hljs-string">&quot;SomeMethod&quot;</span>, param1, param2, param3, param4); <span class="hljs-comment">// 这些参数是什么类型？</span><br><br><span class="hljs-comment">// 返回值处理复杂</span><br><span class="hljs-keyword">var</span> result = wrapper.Call(<span class="hljs-string">&quot;GetSomething&quot;</span>);<br><span class="hljs-keyword">var</span> actualResult = (SomeType)result; <span class="hljs-comment">// 需要手动类型转换</span><br></code></pre></td></tr></table></figure>
 
 <h4 id="3-调试和维护地狱"><a href="#3-调试和维护地狱" class="headerlink" title="3. 调试和维护地狱"></a>3. 调试和维护地狱</h4><ul>
-<li><strong>无法设置断点</strong>：反射调用链无法正常调试</li>
 <li><strong>错误定位困难</strong>：异常堆栈信息不准确</li>
 <li><strong>代码可读性差</strong>：新团队成员难以理解和维护</li>
 <li><strong>重构困难</strong>：任何API变更都可能导致运行时错误</li>
@@ -488,7 +487,7 @@
 </ul>
 <h3 id="💰-灵活的商业模式"><a href="#💰-灵活的商业模式" class="headerlink" title="💰 灵活的商业模式"></a>💰 灵活的商业模式</h3><h4 id="项目定制服务"><a href="#项目定制服务" class="headerlink" title="项目定制服务"></a>项目定制服务</h4><ul>
 <li><strong>按项目收费</strong>：根据项目复杂度和需求定价</li>
-<li><strong>快速交付</strong>：1-2周内完成环境搭建和培训</li>
+<li><strong>快速交付</strong>：1周内完成环境搭建和培训</li>
 <li><strong>质量保证</strong>：提供完整的测试和验证</li>
 </ul>
 <h4 id="企业年度授权"><a href="#企业年度授权" class="headerlink" title="企业年度授权"></a>企业年度授权</h4><ul>
@@ -546,7 +545,7 @@
 <h2 id="📞-联系我们"><a href="#📞-联系我们" class="headerlink" title="📞 联系我们"></a>📞 联系我们</h2><h3 id="立即获取专业咨询"><a href="#立即获取专业咨询" class="headerlink" title="立即获取专业咨询"></a>立即获取专业咨询</h3><p>如果您正在为传统方案的技术瓶颈而烦恼，如果您希望获得与正向开发完全一致的专业体验，<strong>现在就是最佳时机！</strong></p>
 <p><strong>联系方式：</strong></p>
 <ul>
-<li>📧 <strong>邮箱</strong>：<a href="mailto:&#x32;&#x39;&#x35;&#50;&#x33;&#x38;&#54;&#52;&#49;&#64;&#x71;&#113;&#x2e;&#x63;&#x6f;&#109;">295238641@qq.com</a></li>
+<li>📧 <strong>邮箱</strong>：<a href="mailto:&#50;&#57;&#53;&#50;&#x33;&#x38;&#x36;&#52;&#49;&#x40;&#113;&#x71;&#x2e;&#99;&#111;&#x6d;">295238641@qq.com</a></li>
 <li>💬 <strong>QQ</strong>：295238641</li>
 <li>⏰ <strong>响应时间</strong>：工作日2小时内回复</li>
 </ul>
@@ -560,7 +559,7 @@
 </ol>
 <hr>
 <h2 id="💬-常见问题解答"><a href="#💬-常见问题解答" class="headerlink" title="💬 常见问题解答"></a>💬 常见问题解答</h2><h3 id="技术相关问题"><a href="#技术相关问题" class="headerlink" title="技术相关问题"></a>技术相关问题</h3><h4 id="Q-你们的解决方案与传统反射方案的核心区别是什么？"><a href="#Q-你们的解决方案与传统反射方案的核心区别是什么？" class="headerlink" title="Q: 你们的解决方案与传统反射方案的核心区别是什么？"></a>Q: 你们的解决方案与传统反射方案的核心区别是什么？</h4><p><strong>A:</strong> 我们的方案完全摆脱了反射机制，实现了原生级的性能表现。传统反射方案每次调用都需要50-100倍的性能开销，而我们的方案性能与正向开发完全一致，同时提供完整的IDE智能提示和编译时类型检查。</p>
-<h4 id="Q-是否支持原生IL2CPP环境下的开发支持（即非HybridCLR环境）？"><a href="#Q-是否支持原生IL2CPP环境下的开发支持（即非HybridCLR环境）？" class="headerlink" title="Q: 是否支持原生IL2CPP环境下的开发支持（即非HybridCLR环境）？"></a>Q: 是否支持原生IL2CPP环境下的开发支持（即非HybridCLR环境）？</h4><p><strong>A:</strong> 由于技术精力分配的考虑，目前暂不支持。另外，此类需求与UREngine反编译引擎有功能重叠，未来开发的可能性相对较低。我们专注于HybridCLR环境下的最佳解决方案。</p>
+<h4 id="Q-是否支持原生IL2CPP环境下的开发支持（即非HybridCLR环境）？"><a href="#Q-是否支持原生IL2CPP环境下的开发支持（即非HybridCLR环境）？" class="headerlink" title="Q: 是否支持原生IL2CPP环境下的开发支持（即非HybridCLR环境）？"></a>Q: 是否支持原生IL2CPP环境下的开发支持（即非HybridCLR环境）？</h4><p><strong>A:</strong> 由于技术精力分配的考虑，目前暂不支持。另外，此类需求与UREngine反编译引擎有功能重叠，未来开发的可能性相对较低。</p>
 <h4 id="Q-这个框架会对原始DLL产生入侵吗？"><a href="#Q-这个框架会对原始DLL产生入侵吗？" class="headerlink" title="Q: 这个框架会对原始DLL产生入侵吗？"></a>Q: 这个框架会对原始DLL产生入侵吗？</h4><p><strong>A:</strong> 不会，注入的DLL类似一个插件，对原始DLL零入侵。是否入侵完全取决于您的开发方式。所以原始DLL更新也不会对您的插件产生任何影响。</p>
 <h4 id="Q-如果调用的函数在原游戏中不存在，但Unity引擎API中存在，可以自动补全吗？"><a href="#Q-如果调用的函数在原游戏中不存在，但Unity引擎API中存在，可以自动补全吗？" class="headerlink" title="Q: 如果调用的函数在原游戏中不存在，但Unity引擎API中存在，可以自动补全吗？"></a>Q: 如果调用的函数在原游戏中不存在，但Unity引擎API中存在，可以自动补全吗？</h4><p><strong>A:</strong> Unity引擎相关类和System类均无法自动补全，这是由于在编译期间就已经被Unity的AOT裁剪机制处理完毕。这个问题即使在HybridCLR的原生环境中也同样存在，属于Unity AOT裁剪机制的固有限制。</p>
 <h4 id="Q-支持哪些Unity版本和HybridCLR版本？"><a href="#Q-支持哪些Unity版本和HybridCLR版本？" class="headerlink" title="Q: 支持哪些Unity版本和HybridCLR版本？"></a>Q: 支持哪些Unity版本和HybridCLR版本？</h4><p><strong>A:</strong> 我们支持主流的Unity版本 和HybridCLR版本。并且我们会持续跟进最新版本的支持。</p>
@@ -568,7 +567,7 @@
 <h3 id="商业合作问题"><a href="#商业合作问题" class="headerlink" title="商业合作问题"></a>商业合作问题</h3><h4 id="Q-HybridCLR环境支持是否等同于游戏Mod开发？"><a href="#Q-HybridCLR环境支持是否等同于游戏Mod开发？" class="headerlink" title="Q: HybridCLR环境支持是否等同于游戏Mod开发？"></a>Q: HybridCLR环境支持是否等同于游戏Mod开发？</h4><p><strong>A:</strong> 是的，两者本质上是相同的概念，都属于非官方的游戏插件和Mod开发范畴。我们的解决方案为Mod开发提供了前所未有的开发体验。</p>
 <h4 id="Q-定制部署是否针对每个游戏项目单独收费？"><a href="#Q-定制部署是否针对每个游戏项目单独收费？" class="headerlink" title="Q: 定制部署是否针对每个游戏项目单独收费？"></a>Q: 定制部署是否针对每个游戏项目单独收费？</h4><p><strong>A:</strong> 是的，采用按项目收费模式。如果有大量业务需求，可以协商降低单项费用，或考虑年度授权的合作方案。我们提供灵活的商业模式以满足不同客户需求。</p>
 <h4 id="Q-是否提供完整的注入环境支持？"><a href="#Q-是否提供完整的注入环境支持？" class="headerlink" title="Q: 是否提供完整的注入环境支持？"></a>Q: 是否提供完整的注入环境支持？</h4><p><strong>A:</strong> 可以提供包括模拟器、真机、全架构、Android全系统版本的注入插件DLL支持。同时包含完整的开发工具链和自动化部署系统。</p>
-<h4 id="Q-项目交付周期一般是多长？"><a href="#Q-项目交付周期一般是多长？" class="headerlink" title="Q: 项目交付周期一般是多长？"></a>Q: 项目交付周期一般是多长？</h4><p><strong>A:</strong> 标准项目的环境搭建和基础培训通常在1-2周内完成。复杂项目的定制化开发周期会根据具体需求评估，但相比传统方案可以节省60-80%的开发时间。</p>
+<h4 id="Q-项目交付周期一般是多长？"><a href="#Q-项目交付周期一般是多长？" class="headerlink" title="Q: 项目交付周期一般是多长？"></a>Q: 项目交付周期一般是多长？</h4><p><strong>A:</strong> 标准项目的环境搭建和基础培训通常在1周内完成，如果有合作方有Unity正向开发经验通常1天内。复杂项目的定制化开发周期会根据具体需求评估，但相比传统方案可以节省60-80%的开发时间。</p>
 <h4 id="Q-技术支持服务包含哪些内容？"><a href="#Q-技术支持服务包含哪些内容？" class="headerlink" title="Q: 技术支持服务包含哪些内容？"></a>Q: 技术支持服务包含哪些内容？</h4><p><strong>A:</strong> 包含7x24小时技术支持、定期版本更新、定制化功能开发、团队技术培训、性能优化咨询等全方位服务。我们提供的不仅是技术方案，更是完整的企业级服务体系。</p>
 <h4 id="Q-如何保证方案的稳定性和可靠性？"><a href="#Q-如何保证方案的稳定性和可靠性？" class="headerlink" title="Q: 如何保证方案的稳定性和可靠性？"></a>Q: 如何保证方案的稳定性和可靠性？</h4><p><strong>A:</strong> 我们的方案已经在多个大型项目中得到验证，具有完善的测试体系和质量保证流程。同时提供长期技术支持，确保方案的持续稳定运行。</p>
 <h3 id="学习和使用问题"><a href="#学习和使用问题" class="headerlink" title="学习和使用问题"></a>学习和使用问题</h3><h4 id="Q-团队成员需要具备什么技术背景才能使用？"><a href="#Q-团队成员需要具备什么技术背景才能使用？" class="headerlink" title="Q: 团队成员需要具备什么技术背景才能使用？"></a>Q: 团队成员需要具备什么技术背景才能使用？</h4><p><strong>A:</strong> 我们的方案大大降低了技术门槛。具备基础C#和Unity开发经验的开发者即可快速上手，无需深入的逆向工程或Native开发背景。我们提供完整的培训和文档支持。</p>
@@ -585,7 +584,7 @@
 <p><strong>您的项目值得更好的技术方案，您的团队值得更好的开发体验！</strong></p>
 <p>立即联系我们，让专业的技术团队为您的项目保驾护航！</p>
 <hr>
-<p><em>本文档最后更新：2025年7月1日</em><br><em>技术支持：<a href="mailto:&#x32;&#x39;&#x35;&#x32;&#51;&#x38;&#54;&#x34;&#49;&#x40;&#x71;&#x71;&#46;&#x63;&#x6f;&#109;">295238641@qq.com</a></em> </p>
+<p><em>本文档最后更新：2025年7月1日</em><br><em>技术支持：<a href="mailto:&#50;&#57;&#53;&#x32;&#x33;&#56;&#54;&#52;&#49;&#64;&#x71;&#x71;&#x2e;&#99;&#x6f;&#109;">295238641@qq.com</a></em> </p>
 
                 
               </div>

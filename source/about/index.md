@@ -54,6 +54,7 @@ layout: about
 
 - **GitHub**: [IIIImmmyyy](https://github.com/IIIImmmyyy)
 - **邮箱**: [Email](mailto:295238641@qq.com)
+- **QQ**：295238641
 - **技术交流**: 欢迎讨论Unity逆向工程相关话题
 
 ## 🎯 博客内容

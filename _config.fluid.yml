@@ -114,7 +114,7 @@ footer:
   # 展示网站的 PV、UV 统计数
   # Display website PV and UV statistics
   statistics:
-    enable: false
+    enable: true
 
 #---------------------------
 # 首页
@@ -196,7 +196,7 @@ post:
     # 浏览量计数
     # Number of visits
     views:
-      enable: false
+      enable: true
 
   # 侧边栏展示文章目录
   # Table of contents (TOC) in the sidebar

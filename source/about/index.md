@@ -12,7 +12,7 @@ layout: about
 
 ## 🔧 技术专长
 
-- **Unity逆向工程**: 深度理解Unity IL2CPP编译原理和逆向分析技术
+- **Unity逆向工程**: 深度理解Unity IL2CPP编译原理和逆向分析技术、能完整逆出整个IL2CPP下的Unity工程
 - **移动端逆向**: Android APK/IPA逆向分析，游戏安全研究
 - **反混淆技术**: OLLVM反混淆，代码还原与分析
 

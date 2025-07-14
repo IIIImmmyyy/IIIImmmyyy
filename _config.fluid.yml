@@ -139,7 +139,7 @@ index:
     enable: true
     # 为空则按 hexo config.subtitle 显示
     # If empty, text based on `subtitle` in hexo config
-    text: "专注解决方案"
+    text: "逆向爱好者"
 
   # 自动截取文章摘要
   # Auto extract post
